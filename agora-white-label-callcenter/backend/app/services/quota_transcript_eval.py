@@ -178,7 +178,7 @@ def _system_prompt(allowed: dict[str, set[str]], cells_payload: list[dict]) -> s
         dim_lines.append(f'- {k!r}: 允许取值（仅允许这些字面量，语义匹配后需对应其中之一）: {sorted(vals)}')
     cell_lines = json.dumps(cells_payload, ensure_ascii=False, indent=2)
     return f"""\
-你是电话调查数据抽取员。只根据下方「对话转写」做判断，**禁止**臆测或补全转写中未确定的信息。
+你是通话记录数据抽取员。只根据下方「对话转写」做判断，**禁止**臆测或补全转写中未确定的信息。
 
 配额格子（每格有一组必须同时满足的 filter）仅用于你理解需要抽取哪些维度，**不要**在输出中写格子 id：
 {cell_lines}

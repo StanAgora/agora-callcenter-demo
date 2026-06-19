@@ -1,30 +1,32 @@
-# Smart Campaign Manager
+# Call Center Console
 
-韩国电话调查活动管理平台。支持 CATI 与 URL (OQD) 两种调查类型，通过 AI（Claude）自动生成 Voice Agent 访谈脚本与配额结构，并提供实时活动监控看板。
+A white-label outbound voice call-center platform. Upload a call script, let AI (Claude) generate the voice-agent prompt and quota structure, launch outbound campaigns, and monitor outcomes in real time.
 
----
-
-## 功能概览
-
-| 模块 | 描述 |
-|------|------|
-| **问卷上传** | 支持 PDF（推荐）、DOCX、XLSX 三种格式 |
-| **AI Prompt 生成** | Claude 读取问卷，以 JSON 格式输出 8 段（Greeting + 7 节）Voice Agent 系统提示词，生成时显示接收字节数 |
-| **分区编辑** | Prompt 按段落独立显示，每段可折叠/展开、单独编辑；Greeting 单独存储供 Voice Agent 平台使用 |
-| **Structured Output** | 自动提取变量 Schema（变量名 / 类型 / 答案编码），可手动编辑 |
-| **模拟对话** | 在 Prompt 编辑页直接与 AI 对话，扮演受访者测试访谈流程；Greeting 在对话开始时直接显示 |
-| **配额管理** | AI 自动推荐 + 自然语言需求调整 + 滑块/数字输入手动修改 |
-| **实时看板** | WebSocket 推送配额进度、通话记录、实时对话转录 |
-| **多语言** | 支持韩语 / 英语 / 中文 / 日语（i18next） |
+The UI is fully brandable (product name, logo, colors, copy) through a single config with environment overrides — see [Branding](#branding) below.
 
 ---
 
-## 技术栈
+## Feature Overview
 
-### 前端 (`frontend/`)
+| Module | Description |
+|--------|-------------|
+| **Script upload** | Accepts PDF (recommended), DOCX, and XLSX files |
+| **AI prompt generation** | Claude reads the call script and streams a JSON object with a greeting plus structured sections, which become the voice-agent system prompt |
+| **Section editing** | The generated prompt is shown section by section — each can be collapsed/expanded and edited independently; the greeting is stored separately for the voice platform |
+| **Structured output** | Automatically extracts a variable schema (name / type / answer codes) that you can edit by hand |
+| **Simulated conversation** | Chat with the AI directly in the prompt editor to test the call flow before going live |
+| **Quota management** | AI recommendation + natural-language adjustment + manual slider/number editing |
+| **Real-time dashboard** | WebSocket push of quota progress, call records, and live transcripts |
+| **Internationalization** | Korean / English / Chinese / Japanese (i18next) |
 
-| 技术 | 版本 |
-|------|------|
+---
+
+## Tech Stack
+
+### Frontend (`frontend/`)
+
+| Tech | Version |
+|------|---------|
 | React | 19 |
 | Vite | 8 |
 | TypeScript | 5.9 |
@@ -33,10 +35,10 @@
 | Tailwind CSS | 3 |
 | i18next | 26 |
 
-### 后端 (`backend/`)
+### Backend (`backend/`)
 
-| 技术 | 版本 |
-|------|------|
+| Tech | Version |
+|------|---------|
 | FastAPI | 0.115 |
 | SQLAlchemy (async) | 2.0 |
 | aiosqlite | 0.20 |
@@ -49,173 +51,192 @@
 
 ---
 
-## 目录结构
+## Project Structure
 
 ```
-smart_compain_manager/
+agora-white-label-callcenter/
 ├── frontend/
 │   └── src/
-│       ├── types/index.ts          # 全局 TypeScript 类型
+│       ├── brand.config.ts         # White-label config (name, logo, colors, copy)
+│       ├── types/index.ts          # Shared TypeScript types
 │       ├── pages/
-│       │   ├── surveys/            # 列表、新建向导、Prompt编辑
-│       │   ├── quotas/             # 配额编辑
-│       │   ├── dashboard/          # 实时看板
-│       │   └── settings/           # 系统设置
+│       │   ├── auth/               # Login
+│       │   ├── campaigns/          # Campaign list / detail / agent prompt
+│       │   ├── dashboard/          # Real-time dashboard
+│       │   ├── quotas/             # Quota editor
+│       │   └── settings/           # System settings
 │       ├── components/
-│       │   ├── Layout.tsx          # 侧边栏导航
+│       │   ├── Layout.tsx          # Sidebar navigation shell
 │       │   └── ui/                 # Badge, ProgressBar
 │       ├── i18n/locales/           # ko / en / zh / ja
-│       ├── mocks/                  # 开发用静态数据 & MockWebSocket
+│       ├── mocks/                  # Static dev data & MockWebSocket
 │       └── lib/utils.ts
 ├── backend/
 │   └── app/
-│       ├── main.py                 # FastAPI 入口 + CORS + lifespan
+│       ├── main.py                 # FastAPI entrypoint + CORS + lifespan
 │       ├── core/
 │       │   ├── config.py           # Pydantic Settings (.env)
-│       │   └── database.py         # 异步 SQLAlchemy + init_db
-│       ├── models/                 # Survey, QuotaCell, PhoneRecord, CallLog
+│       │   └── database.py         # Async SQLAlchemy + init_db
+│       ├── models/                 # SQLAlchemy ORM models
 │       ├── schemas/                # Pydantic I/O schemas
-│       ├── api/
-│       │   ├── surveys.py          # 调查 CRUD + 文件上传解析
-│       │   ├── quotas.py           # 配额 CRUD + AI 推荐
-│       │   ├── campaigns.py        # 活动 start / pause
-│       │   ├── callbacks.py        # Voice Agent 回调接收
-│       │   ├── websocket.py        # WS /ws/campaigns/{id}
-│       │   └── voice_prompt.py     # Prompt 生成/保存/模拟
+│       ├── api/                    # Campaign, quota, callback, websocket routers
 │       └── services/
-│           ├── parsers/            # cati_parser, oqd_parser, docx_parser
-│           ├── quota_ai.py         # Claude 配额推荐
-│           ├── voice_prompt_generator.py  # Claude Prompt 流式生成 + Schema提取
-│           ├── voice_agent.py      # Voice Agent REST 适配器（stub）
-│           ├── campaign_runner.py  # asyncio 轮询任务
-│           ├── ws_hub.py           # WebSocket 广播 Hub
-│           └── webhook_dispatcher.py  # HMAC-SHA256 Webhook 推送
-├── memory/                         # 项目笔记（非运行时）
-└── CLAUDE.md                       # AI 辅助开发说明
+│           ├── parsers/            # PDF / DOCX / XLSX text extraction
+│           ├── voice_prompt_generator.py  # Claude streaming prompt + schema extraction
+│           ├── quota_agent_notifier.py     # Prepends quota-closed notices to the agent prompt
+│           ├── campaign_runner.py  # asyncio polling task per campaign
+│           └── ws_hub.py           # WebSocket broadcast hub
+├── memory/                         # Project notes (non-runtime)
+└── CLAUDE.md                       # Guidance for AI-assisted development
 ```
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 1. 克隆仓库
+### 1. Clone
 
 ```bash
 git clone <repo-url>
-cd smart_compain_manager
+cd agora-white-label-callcenter
 ```
 
-### 2. 后端
+### 2. Backend
 
 ```bash
 cd backend
-cp .env.example .env        # 填写 API Key 等配置
+cp .env.example .env        # Fill in API keys and other config
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-# 后端运行于 http://localhost:8000
+# Backend runs at http://localhost:8000
 ```
 
-#### 填充测试数据（可选）
+SQLite is used in development (`dev.db` is created automatically on first run). Switch `DATABASE_URL` to PostgreSQL for production.
+
+#### Seed sample data (optional)
 
 ```bash
 cd backend
 python seed.py
-# 写入 4 条示例调查（含完整 Prompt + Schema）
+# Inserts a few sample campaigns (with full prompt + schema)
 ```
 
-### 3. 前端
+### 3. Frontend
 
 ```bash
 cd frontend
-npm install                  # 或 pnpm install
+npm install                 # or pnpm install
 npm run dev
-# 前端运行于 http://localhost:5173
+# Frontend runs at http://localhost:5173
+```
+
+The demo login defaults to `demo` / `demo` (configurable — see Branding).
+
+---
+
+## Branding
+
+All white-label settings live in `frontend/src/brand.config.ts` and can be overridden with `VITE_*` environment variables (e.g. in `frontend/.env`). With no overrides, the app ships with neutral defaults.
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `VITE_BRAND_PRODUCT_NAME` | `Call Center Console` | App name (sidebar, login, browser tab) |
+| `VITE_BRAND_LOGO_URL` | _(empty → initial-letter mark)_ | Logo image URL |
+| `VITE_BRAND_PRIMARY_COLOR` | `#2563EB` | Primary theme color (drives the whole UI) |
+| `VITE_BRAND_ACCENT_COLOR` | `#059669` | Accent color |
+| `VITE_BRAND_FOOTER_TEXT` | `Powered by Voice AI Platform` | Login footer |
+| `VITE_BRAND_LOGIN_SUBTITLE` | `Manage campaigns, agents, and call outcomes` | Login subtitle |
+| `VITE_BRAND_SIDEBAR_USER_LABEL` | `Demo Admin` | Sidebar user name |
+| `VITE_BRAND_SIDEBAR_USER_ROLE` | `Administrator` | Sidebar user role |
+| `VITE_BRAND_DEMO_BANNER` | `true` | Toggle the "demo / not for production" banner |
+| `VITE_BRAND_DEMO_BANNER_TEXT` | `Demo environment. Not for production use.` | Banner text |
+| `VITE_DEMO_USERNAME` / `VITE_DEMO_PASSWORD` | `demo` / `demo` | Demo login credentials |
+
+The theme color is applied at runtime as CSS variables (`--brand-primary`), so changing `VITE_BRAND_PRIMARY_COLOR` re-skins the entire app.
+
+---
+
+## Environment Variables (`backend/.env`)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `sqlite+aiosqlite:///./dev.db` | Database connection (PostgreSQL in production) |
+| `ANTHROPIC_API_KEY` | — | Claude API key (required for AI features) |
+| `VOICE_AGENT_BASE_URL` | `http://localhost:9000` | Voice platform REST base URL |
+| `VOICE_AGENT_API_KEY` | — | Voice platform auth key |
+| `WEBHOOK_SECRET` | `changeme` | HMAC signing key for result callbacks |
+| `POLL_INTERVAL_SECONDS` | `5` | How often to poll the voice platform (seconds) |
+| `MAX_CONCURRENT_CALLS` | `10` | Maximum concurrent outbound calls |
+
+---
+
+## Key Data Flows
+
+```
+Upload PDF/DOCX → extract text → store as the campaign call script
+Generate prompt → stream JSON sections → frontend renders sections → backend extracts structured_output_schema
+               → voice-agent prompt (sections joined) + greeting stored separately
+AI quota suggest → Claude analyzes the call script → generates QuotaCell list
+Start campaign  → campaign_runner reads prompt + greeting → attaches them to each outbound call
+               → polls the voice platform → broadcasts live progress over WebSocket
+Voice callback  → POST /api/callbacks/call-result → updates QuotaCell.completed
+Campaign done   → status = completed → triggers webhook delivery
 ```
 
 ---
 
-## 环境变量（`backend/.env`）
+## WebSocket Message Types
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `DATABASE_URL` | `sqlite+aiosqlite:///./dev.db` | 数据库连接（生产换 PostgreSQL） |
-| `ANTHROPIC_API_KEY` | — | Claude API 密钥（必填） |
-| `VOICE_AGENT_BASE_URL` | `http://localhost:9000` | Voice Agent REST 基础地址 |
-| `VOICE_AGENT_API_KEY` | — | Voice Agent 认证密钥 |
-| `WEBHOOK_SECRET` | `changeme` | Webhook HMAC 签名密钥 |
-| `POLL_INTERVAL_SECONDS` | `5` | 轮询 Voice Agent 的间隔（秒） |
-| `MAX_CONCURRENT_CALLS` | `10` | 最大并发外呼数 |
-
----
-
-## 主要数据流
-
-```
-上传 PDF/DOCX  → 解析文本 → 存入 questionnaire_raw / file_data
-AI 生成 Prompt → 流式输出 JSON（8段）→ 前端解析为分区 → 后台提取 structured_output_schema
-               → voice_agent_prompt（7段拼接）+ voice_agent_greeting 分别存储
-AI 配额推荐   → Claude 分析问卷 → 生成 QuotaCell 列表
-启动活动       → campaign_runner 读取 prompt + greeting → 每次外呼附带到 context
-               → 轮询 Voice Agent → WS 广播实时进度
-VA 回调        → POST /api/callbacks/call-result → 更新 QuotaCell.completed
-活动完成       → survey.status = completed → 触发 Webhook 推送
-```
+| type | Data fields | Description |
+|------|-------------|-------------|
+| `quota_update` | `cell`, `overallStats` | Quota cell completion update |
+| `call_started` | `call` | New call started |
+| `transcript_update` | `callId`, `line` | Live transcript line |
+| `call_completed` | `callId`, `resultCode`, `responses` | Call ended |
+| `campaign_completed` | — | All quotas filled |
+| `campaign_status` | `status` | Campaign status changed |
 
 ---
 
-## WebSocket 消息类型
+## Call Outcome Codes
 
-| type | 数据字段 | 说明 |
-|------|---------|------|
-| `quota_update` | `cell`, `overallStats` | 配额格完成数更新 |
-| `call_started` | `call` | 新通话开始 |
-| `transcript_update` | `callId`, `line` | 实时转录行 |
-| `call_completed` | `callId`, `resultCode`, `responses` | 通话结束 |
-| `campaign_completed` | — | 所有配额满额 |
-| `campaign_status` | `status` | 活动状态变更 |
-
----
-
-## 通话结果编码
-
-| 代码 | 含义 |
-|------|------|
-| 0 | 조사성공（调查成功） |
-| 1 | 결번（空号） |
-| 2 | 기업체/FAX |
-| 3 | 강력거절（强烈拒绝） |
-| 4 | 거절（拒绝） |
-| 5 | 비수신（无人接听） |
-| 6 | 통화중（占线） |
-| 7 | 대상아님（不符条件） |
-| 8 | 쿼터오버（配额满） |
-| 9 | 중도포기（中途放弃） |
-| 10 | 기타（其他） |
+| Code | Meaning |
+|------|---------|
+| 0 | Completed |
+| 1 | Invalid Number |
+| 2 | Business/Fax |
+| 3 | Declined |
+| 4 | Soft Decline |
+| 5 | No Answer |
+| 6 | Busy |
+| 7 | Not Eligible |
+| 8 | Quota Full |
+| 9 | Abandoned |
+| 10 | Other |
 
 ---
 
-## 开发命令速查
+## Development Commands
 
 ```bash
-# 后端类型检查（无需构建）
+# Backend smoke check
 cd backend && python -m py_compile app/main.py
 
-# 前端类型检查
+# Frontend type-check
 cd frontend && npx tsc --noEmit
 
-# 前端构建
+# Frontend build
 cd frontend && npm run build
 ```
 
 ---
 
-## 待办 / 已知问题
+## Roadmap / Known Issues
 
-- [ ] **DashboardPage** 目前使用 Mock 数据，待对接真实后端 API + WebSocket
-- [ ] **SettingsPage** 保存功能待对接后端配置接口
-- [ ] **Voice Agent** 真实接口规范待确定（当前为 httpx stub）
-- [ ] URL (OQD) 类型上传流程待完善（后端需补充 survey_url 参数处理）
-- [ ] 生产环境数据库切换 PostgreSQL + Alembic 迁移
+- [ ] **DashboardPage** currently uses mock data; wire it to the real backend API + WebSocket
+- [ ] **SettingsPage** save action needs to be connected to the backend config endpoint
+- [ ] **Voice platform** integration is an httpx stub pending a finalized API spec
+- [ ] Production database migration to PostgreSQL + Alembic
 
 ---
 

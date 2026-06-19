@@ -123,7 +123,7 @@ export function CampaignsPage() {
         </div>
         <Link
           to="/surveys/new"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
         >
           <Plus size={16} strokeWidth={2.5} />
           {t('nav.new_campaign')}
@@ -134,7 +134,7 @@ export function CampaignsPage() {
       <div className="flex-1 overflow-auto p-6">
         {loading && (
           <div className="flex items-center justify-center py-24 text-gray-400">
-            <Loader2 size={20} className="animate-spin mr-2 text-indigo-600" />
+            <Loader2 size={20} className="animate-spin mr-2 text-primary-600" />
             <span className="text-sm">{t('agora.loading')}</span>
           </div>
         )}
@@ -145,8 +145,8 @@ export function CampaignsPage() {
 
         {!loading && !error && campaigns.length === 0 && (
           <div className="bg-white border border-gray-100 rounded-xl p-16 text-center shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center mx-auto mb-4">
-              <Radio size={28} className="text-indigo-600" />
+            <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-4">
+              <Radio size={28} className="text-primary-600" />
             </div>
             <p className="text-base font-medium text-gray-900">{t('agora.empty')}</p>
             <p className="text-sm text-gray-400 mt-1">{t('agora.empty_hint')}</p>
@@ -188,7 +188,7 @@ export function CampaignsPage() {
                         st.chip
                       )}>
                         {st.dot && <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse', st.dot)} />}
-                        {statusLabel[status] ?? status}
+                        {(statusLabel as Record<string, string>)[status] ?? status}
                       </span>
                       {/* Interrupt button */}
                       <button
@@ -217,7 +217,7 @@ export function CampaignsPage() {
                   {/* Chips row */}
                   <div className="px-5 pb-3 flex items-center gap-1.5 flex-wrap">
                     {c.questionnaire_type && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600 border border-indigo-100">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-600 border border-primary-100">
                         {campaignAgentSourceLabel(t, c.questionnaire_type)}
                       </span>
                     )}
@@ -252,7 +252,7 @@ export function CampaignsPage() {
                         <span className="font-mono text-gray-600">{done} / {total}</span>
                         <span className={cn(
                           'font-semibold',
-                          pct >= 100 ? 'text-emerald-600' : 'text-indigo-600'
+                          pct >= 100 ? 'text-emerald-600' : 'text-primary-600'
                         )}>{pct}%</span>
                       </div>
                     </div>
@@ -272,7 +272,7 @@ export function CampaignsPage() {
                   <div className="border-t border-gray-100 grid grid-cols-3">
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors border-r border-gray-100"
                     >
                       <LayoutDashboard size={13} /> Dashboard
                     </button>
@@ -284,7 +284,7 @@ export function CampaignsPage() {
                     </button>
                     <button
                       onClick={() => navigate(`/campaigns/${c.campaign_id}/agent-prompt`)}
-                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                      className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-600 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                     >
                       <Bot size={13} /> Prompt
                     </button>

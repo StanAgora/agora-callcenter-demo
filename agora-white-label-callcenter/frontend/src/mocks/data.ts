@@ -3,7 +3,7 @@ import type { Survey, QuotaCell, CallLog, CampaignStats, ActiveCall, QuotaAiSugg
 export const MOCK_SURVEYS: Survey[] = [
   {
     id: 'survey-001',
-    name: 'NBS 113차 기준지표조사',
+    name: '고객 만족도 캠페인 113차',
     type: 'URL',
     status: 'running',
     quotaMode: 'hybrid',
@@ -14,7 +14,7 @@ export const MOCK_SURVEYS: Survey[] = [
   },
   {
     id: 'survey-002',
-    name: '인천 서구 명칭 변경 인식 조사',
+    name: '신규 서비스 안내 캠페인',
     type: 'CATI',
     status: 'paused',
     quotaMode: 'ai',
@@ -25,7 +25,7 @@ export const MOCK_SURVEYS: Survey[] = [
   },
   {
     id: 'survey-003',
-    name: '2024 Q1 정치 여론조사',
+    name: '2024 Q1 재계약 안내 캠페인',
     type: 'URL',
     status: 'completed',
     quotaMode: 'manual',
@@ -36,7 +36,7 @@ export const MOCK_SURVEYS: Survey[] = [
   },
   {
     id: 'survey-004',
-    name: '신규 지역 민원 인식 조사',
+    name: '연체 안내 아웃바운드 캠페인',
     type: 'CATI',
     status: 'draft',
     quotaMode: 'manual',
@@ -111,9 +111,9 @@ export const MOCK_AI_SUGGESTION: QuotaAiSuggestion = {
   },
   suggestedQuotaPerCell: 20,
   screeningRules: [
-    'SQ1: 인천시 서구 거주 여부 확인 (아니오 → 조사 종료)',
-    'SQ1-1: 거주 동 확인 (검단구 소속 동 → 조사 종료)',
-    'SQ3: 만 18세 미만 → 조사 종료',
+    'SQ1: 인천시 서구 거주 여부 확인 (아니오 → 통화 종료)',
+    'SQ1-1: 거주 동 확인 (검단구 소속 동 → 통화 종료)',
+    'SQ3: 만 18세 미만 → 통화 종료',
   ],
   notes: '분구 후 검단구에 편입될 동 거주자 제외 필요',
 }
@@ -153,7 +153,7 @@ export const MOCK_ACTIVE_CALLS: ActiveCall[] = [
     quotaCell: { areaName: '2지역', genderName: '여자', ageName: '40~49세' },
     startedAt: new Date(Date.now() - 95_000).toISOString(),
     transcript: [
-      { speaker: 'agent', text: '안녕하세요. 엠브레인리서치 면접원입니다. 잠시 여론조사에 참여해 주시겠습니까?', timestamp: new Date(Date.now() - 94_000).toISOString() },
+      { speaker: 'agent', text: '안녕하세요. 저는 AI 음성 상담원입니다. 잠시 안내 말씀 드려도 될까요?', timestamp: new Date(Date.now() - 94_000).toISOString() },
       { speaker: 'respondent', text: '네, 말씀하세요.', timestamp: new Date(Date.now() - 88_000).toISOString() },
       { speaker: 'agent', text: '현재 인천시 서구에 거주하고 계십니까?', timestamp: new Date(Date.now() - 85_000).toISOString() },
       { speaker: 'respondent', text: '네, 연희동에 살고 있어요.', timestamp: new Date(Date.now() - 78_000).toISOString() },
@@ -167,7 +167,7 @@ export const MOCK_ACTIVE_CALLS: ActiveCall[] = [
     quotaCell: { areaName: '1지역', genderName: '남자', ageName: '30~39세' },
     startedAt: new Date(Date.now() - 42_000).toISOString(),
     transcript: [
-      { speaker: 'agent', text: '안녕하세요. 여론조사 협조 부탁드립니다.', timestamp: new Date(Date.now() - 41_000).toISOString() },
+      { speaker: 'agent', text: '안녕하세요. 잠시 통화 괜찮으실까요?', timestamp: new Date(Date.now() - 41_000).toISOString() },
       { speaker: 'respondent', text: '얼마나 걸려요?', timestamp: new Date(Date.now() - 35_000).toISOString() },
       { speaker: 'agent', text: '약 3분 정도입니다.', timestamp: new Date(Date.now() - 30_000).toISOString() },
     ],

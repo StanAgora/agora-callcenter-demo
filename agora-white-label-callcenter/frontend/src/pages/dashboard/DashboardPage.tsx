@@ -6,7 +6,6 @@ import { MOCK_SURVEYS, MOCK_STATS, MOCK_QUOTA_CELLS, MOCK_CALL_LOGS, MOCK_ACTIVE
 import { MockWebSocket } from '../../mocks/ws-mock'
 import { ProgressBar } from '../../components/ui/ProgressBar'
 import { StatusBadge } from '../../components/ui/Badge'
-import { CALL_RESULT_LABELS } from '../../types'
 import { cn, formatDuration, formatTime, pct } from '../../lib/utils'
 import type { ActiveCall, CallLog, QuotaCell, CampaignStats, WsMessage, SurveyStatus } from '../../types'
 
@@ -93,7 +92,7 @@ export function DashboardPage() {
   function cellColor(c: QuotaCell) {
     const p = pct(c.completed, c.target)
     if (c.status === 'closed') return 'bg-emerald-50 border-emerald-200'
-    if (p >= 75) return 'bg-indigo-50 border-indigo-100'
+    if (p >= 75) return 'bg-primary-50 border-primary-100'
     if (p >= 25) return 'bg-gray-50 border-gray-100'
     return 'bg-white border-gray-200'
   }
@@ -125,11 +124,11 @@ export function DashboardPage() {
               </button>
             </>
           ) : status === 'paused' ? (
-            <button onClick={handleStart} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 transition-colors">
+            <button onClick={handleStart} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-medium hover:bg-primary-700 transition-colors">
               <Play size={13} /> {t('dashboard.btn_resume')}
             </button>
           ) : status === 'draft' ? (
-            <button onClick={handleStart} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 transition-colors">
+            <button onClick={handleStart} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-medium hover:bg-primary-700 transition-colors">
               <Play size={13} /> {t('dashboard.btn_start')}
             </button>
           ) : null}
@@ -150,6 +149,9 @@ export function DashboardPage() {
         <div className="w-72 border-r border-gray-100 overflow-y-auto p-4 flex-shrink-0">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">{t('dashboard.quota_status')}</p>
           <div className="space-y-4">
+            {cells.length === 0 && (
+              <p className="text-xs text-gray-400 py-1">{t('dashboard.no_quota_cells')}</p>
+            )}
             {Array.from(new Set(cells.map(c => c.areaName))).map(area => (
               <div key={area}>
                 <p className="text-xs font-medium text-gray-600 mb-2">{area}</p>
@@ -184,7 +186,7 @@ export function DashboardPage() {
                   className={cn(
                     'flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg border text-xs transition-colors',
                     selectedCallId === call.callId
-                      ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
+                      ? 'border-primary-300 bg-primary-50 text-primary-700'
                       : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
                   )}
                 >
@@ -213,9 +215,9 @@ export function DashboardPage() {
                       'max-w-[75%] rounded-2xl px-4 py-2.5 text-sm',
                       line.speaker === 'agent'
                         ? 'bg-gray-100 text-gray-800 rounded-tl-sm'
-                        : 'bg-indigo-600 text-white rounded-tr-sm'
+                        : 'bg-primary-600 text-white rounded-tr-sm'
                     )}>
-                      <p className={cn('text-[10px] mb-1 font-medium', line.speaker === 'agent' ? 'text-gray-400' : 'text-indigo-200')}>
+                      <p className={cn('text-[10px] mb-1 font-medium', line.speaker === 'agent' ? 'text-gray-400' : 'text-primary-200')}>
                         {line.speaker === 'agent' ? t('dashboard.speaker_agent') : t('dashboard.speaker_respondent')}
                       </p>
                       {line.text}
@@ -241,6 +243,9 @@ export function DashboardPage() {
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{t('dashboard.call_log')}</p>
           </div>
           <div className="divide-y divide-gray-100">
+            {callLogs.length === 0 && (
+              <p className="px-4 py-6 text-xs text-gray-400 text-center">{t('dashboard.no_call_logs')}</p>
+            )}
             {callLogs.map(log => {
               const success = log.resultCode === 0
               return (
@@ -253,7 +258,7 @@ export function DashboardPage() {
                         : <XCircle size={11} className="text-gray-400" />
                       }
                       <span className={cn('text-xs font-medium', success ? 'text-emerald-600' : 'text-gray-400')}>
-                        {CALL_RESULT_LABELS[log.resultCode]}
+                        {t(`dashboard.result_${log.resultCode}`)}
                       </span>
                     </div>
                   </div>
@@ -263,7 +268,7 @@ export function DashboardPage() {
                     {' · '}{formatTime(log.startedAt)}
                   </p>
                   {log.responses && success && (
-                    <p className="text-[10px] text-indigo-600 mt-0.5">
+                    <p className="text-[10px] text-primary-600 mt-0.5">
                       Q1={log.responses.Q1} Q2={log.responses.Q2} Q3={log.responses.Q3}
                     </p>
                   )}

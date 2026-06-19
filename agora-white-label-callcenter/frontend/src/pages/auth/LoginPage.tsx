@@ -4,7 +4,7 @@ import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { login } from '../../lib/auth'
 import { LANGUAGES, setLang, type Lang } from '../../i18n'
-import agoraLogo from '../../assets/agora-logo-2.webp'
+import { brandConfig } from '../../brand.config'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -34,17 +34,30 @@ export function LoginPage() {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          <img src={agoraLogo} alt="Agora" className="h-8 w-auto object-contain mb-3" />
-          <p className="text-sm text-gray-400">Call Center Management</p>
+        <div className="flex flex-col items-center mb-6">
+          {brandConfig.logo ? (
+            <img src={brandConfig.logo} alt={brandConfig.productName} className="h-10 max-w-[220px] object-contain mb-3" />
+          ) : (
+            <div className="h-12 w-12 rounded-xl bg-primary-600 text-white flex items-center justify-center text-xl font-semibold mb-3 shadow-sm">
+              {brandConfig.productName.slice(0, 1).toUpperCase()}
+            </div>
+          )}
+          <p className="text-base font-semibold text-gray-900">{brandConfig.productName}</p>
+          <p className="text-sm text-gray-500 mt-1">{brandConfig.loginSubtitle}</p>
         </div>
+
+        {brandConfig.demoBanner.enabled && (
+          <div className="mb-4 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-xs font-medium text-amber-700">
+            {brandConfig.demoBanner.text}
+          </div>
+        )}
 
         {/* Language selector */}
         <div className="flex justify-center mb-4">
           <select
             value={i18n.language}
             onChange={e => setLang(e.target.value as Lang)}
-            className="px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer"
+            className="px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent cursor-pointer"
           >
             {LANGUAGES.map(({ code, flag, label }) => (
               <option key={code} value={code}>
@@ -71,7 +84,7 @@ export function LoginPage() {
                 placeholder={t('login.username_ph')}
                 autoComplete="username"
                 autoFocus
-                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white transition-shadow"
+                className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white transition-shadow"
               />
             </div>
 
@@ -86,7 +99,7 @@ export function LoginPage() {
                   onChange={e => setPassword(e.target.value)}
                   placeholder={t('login.password_ph')}
                   autoComplete="current-password"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white transition-shadow"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white transition-shadow"
                 />
                 <button
                   type="button"
@@ -107,7 +120,7 @@ export function LoginPage() {
             <button
               type="submit"
               disabled={loading || !username || !password}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg py-2.5 text-sm font-medium transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-300 text-white rounded-lg py-2.5 text-sm font-medium transition-colors"
             >
               {loading && <Loader2 size={15} className="animate-spin" />}
               {loading ? t('login.submitting') : t('login.submit')}
@@ -115,7 +128,7 @@ export function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-xs text-gray-300 mt-6">Powered by Agora</p>
+        <p className="text-center text-xs text-gray-400 mt-6">{brandConfig.footerText}</p>
       </div>
     </div>
   )

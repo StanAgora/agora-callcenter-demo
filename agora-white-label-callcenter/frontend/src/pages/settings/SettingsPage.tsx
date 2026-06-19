@@ -48,7 +48,7 @@ function Field({
           value={value}
           onChange={e => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white font-mono"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm pr-9 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white font-mono"
         />
         {isPassword && (
           <button type="button" onClick={() => setShow(s => !s)}
@@ -81,7 +81,7 @@ export function SettingsPage() {
     fetch(`${API}/api/settings`)
       .then(r => r.json())
       .then(data => setCfg(prev => ({ ...prev, ...data })))
-      .catch(() => setError('无法加载配置，请检查后端是否运行'))
+      .catch(() => setError('Unable to load configuration. Check that the backend is running.'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -102,7 +102,7 @@ export function SettingsPage() {
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
     } catch {
-      setError('保存失败，请重试')
+      setError('Save failed. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -112,7 +112,7 @@ export function SettingsPage() {
     return (
       <div className="flex items-center justify-center py-32 text-gray-400">
         <Loader2 size={20} className="animate-spin mr-2" />
-        <span className="text-sm">加载配置中...</span>
+        <span className="text-sm">Loading configuration…</span>
       </div>
     )
   }
@@ -127,11 +127,11 @@ export function SettingsPage() {
 
       <div className="space-y-5">
 
-        {/* Agora Call Agent */}
-        <Section title="Agora Call Agent API">
+        {/* Call Agent API */}
+        <Section title="Call Agent API">
           <Field
             label="API Key"
-            desc="Authorization header 里的 Base64 编码 Key"
+            desc="Base64-encoded key used in the Authorization header"
             value={cfg.AGORA_API_KEY}
             onChange={set('AGORA_API_KEY')}
             placeholder="NWFl..."
@@ -139,14 +139,14 @@ export function SettingsPage() {
           />
           <Field
             label="Pipeline ID"
-            desc="创建 Campaign 时绑定的 Pipeline"
+            desc="Pipeline bound when creating a campaign"
             value={cfg.AGORA_PIPELINE_ID}
             onChange={set('AGORA_PIPELINE_ID')}
             placeholder="d2936d99..."
           />
           <Field
-            label="Phone Number（主叫号码）"
-            desc="外呼时使用的主叫电话号码"
+            label="Phone Number (caller ID)"
+            desc="Caller number used for outbound calls"
             value={cfg.AGORA_PHONE_NUMBER}
             onChange={set('AGORA_PHONE_NUMBER')}
             placeholder="031186778285"
@@ -154,10 +154,10 @@ export function SettingsPage() {
         </Section>
 
         {/* Claude AI */}
-        <Section title="Claude AI（Anthropic）">
+        <Section title="Claude AI (Anthropic)">
           <Field
             label="Anthropic API Key"
-            desc="用于 AI 生成问卷脚本和配额建议"
+            desc="Used for AI script generation and quota suggestions"
             value={cfg.ANTHROPIC_API_KEY}
             onChange={set('ANTHROPIC_API_KEY')}
             placeholder="sk-ant-..."
@@ -166,10 +166,10 @@ export function SettingsPage() {
         </Section>
 
         {/* Database */}
-        <Section title="数据库">
+        <Section title="Database">
           <Field
             label="DATABASE_URL"
-            desc="SQLAlchemy 异步连接字符串，开发用 SQLite，生产换 PostgreSQL"
+            desc="Async SQLAlchemy connection string — SQLite in dev, PostgreSQL in production"
             value={cfg.DATABASE_URL}
             onChange={set('DATABASE_URL')}
             placeholder="sqlite+aiosqlite:///./dev.db"
@@ -177,10 +177,10 @@ export function SettingsPage() {
         </Section>
 
         {/* Voice Agent */}
-        <Section title="Voice Agent（语音平台）">
+        <Section title="Voice Agent (voice platform)">
           <Field
             label="Endpoint URL"
-            desc="语音平台 REST API 地址"
+            desc="Voice platform REST API base URL"
             value={cfg.VOICE_AGENT_BASE_URL}
             onChange={set('VOICE_AGENT_BASE_URL')}
             placeholder="https://voice-agent.example.com"
@@ -195,15 +195,15 @@ export function SettingsPage() {
           />
           <div className="grid grid-cols-2 gap-4">
             <Field
-              label="最大并发通话数"
-              desc="同时外呼的最大路数"
+              label="Max concurrent calls"
+              desc="Maximum simultaneous outbound calls"
               value={cfg.MAX_CONCURRENT_CALLS}
               onChange={set('MAX_CONCURRENT_CALLS')}
               type="number"
             />
             <Field
-              label="轮询间隔（秒）"
-              desc="向语音平台查询通话状态的频率"
+              label="Poll interval (s)"
+              desc="How often to query the voice platform for call status"
               value={cfg.POLL_INTERVAL_SECONDS}
               onChange={set('POLL_INTERVAL_SECONDS')}
               type="number"
@@ -215,7 +215,7 @@ export function SettingsPage() {
         <Section title="Webhook">
           <Field
             label="Webhook Secret"
-            desc="HMAC-SHA256 签名密钥，用于结果回调验签"
+            desc="HMAC-SHA256 signing key for verifying result callbacks"
             value={cfg.WEBHOOK_SECRET}
             onChange={set('WEBHOOK_SECRET')}
             placeholder="whsec_..."
@@ -228,17 +228,17 @@ export function SettingsPage() {
           {saved && (
             <div className="flex items-center gap-1.5 text-emerald-600 text-sm">
               <CheckCircle2 size={15} />
-              已保存到 .env 文件
+              Saved to .env file
             </div>
           )}
           <div className="ml-auto">
             <button
               onClick={handleSave}
               disabled={saving}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
             >
               {saving && <Loader2 size={14} className="animate-spin" />}
-              {saving ? '保存中...' : '保存设置'}
+              {saving ? 'Saving…' : 'Save Settings'}
             </button>
           </div>
         </div>

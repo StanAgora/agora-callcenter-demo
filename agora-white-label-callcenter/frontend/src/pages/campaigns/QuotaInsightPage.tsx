@@ -38,7 +38,7 @@ function pct(completed: number, target: number): number {
 
 function cellColor(p: number) {
   if (p >= 100) return { bar: 'bg-emerald-500', badge: 'bg-emerald-50 text-emerald-700 border-emerald-200', border: 'border-emerald-200' }
-  if (p >= 60)  return { bar: 'bg-indigo-500',  badge: 'bg-indigo-50 text-indigo-700 border-indigo-200',   border: 'border-indigo-200' }
+  if (p >= 60)  return { bar: 'bg-primary-500',  badge: 'bg-primary-50 text-primary-700 border-primary-200',   border: 'border-primary-200' }
   if (p >= 20)  return { bar: 'bg-amber-400',   badge: 'bg-amber-50 text-amber-700 border-amber-200',      border: 'border-amber-200' }
   return               { bar: 'bg-gray-300',    badge: 'bg-gray-50 text-gray-500 border-gray-200',         border: 'border-gray-200' }
 }
@@ -80,8 +80,8 @@ export function QuotaInsightPage() {
         setCells(cellData)
         const c = campData?.local ? { ...campData.local, ...campData.detail } : campData
         setCampaign({
-          campaign_id: id,
-          campaign_name: c.campaign_name ?? id,
+          campaign_id: id ?? '',
+          campaign_name: c.campaign_name ?? id ?? '',
           status: c.status ?? null,
         })
         if (initial) {
@@ -161,7 +161,7 @@ export function QuotaInsightPage() {
           </h1>
           <p className="text-xs text-gray-400 mt-0.5 font-mono">{id}</p>
         </div>
-        <span className="ml-auto text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1">
+        <span className="ml-auto text-xs font-medium text-primary-700 bg-primary-50 border border-primary-200 rounded-full px-2.5 py-1">
           Quota Insight
         </span>
       </div>
@@ -223,7 +223,7 @@ export function QuotaInsightPage() {
                           overallPct >= 100
                             ? 'bg-emerald-500'
                             : overallPct >= 50
-                              ? 'bg-indigo-500'
+                              ? 'bg-primary-500'
                               : 'bg-amber-400',
                         )}
                         style={{ width: `${overallPct}%` }}
@@ -236,8 +236,8 @@ export function QuotaInsightPage() {
                     icon: Target,
                     label: t('quota_insight.stat_target'),
                     value: totalTarget,
-                    color: 'text-indigo-600',
-                    box: 'bg-indigo-50',
+                    color: 'text-primary-600',
+                    box: 'bg-primary-50',
                   },
                   {
                     icon: TrendingUp,
@@ -315,7 +315,7 @@ export function QuotaInsightPage() {
                             className={cn(
                               'align-top transition-colors',
                               'odd:bg-white even:bg-gray-50',
-                              'hover:bg-indigo-50',
+                              'hover:bg-primary-50',
                             )}
                           >
                             <td className="px-3 py-2.5 font-mono text-xs text-gray-700 break-all">
@@ -387,9 +387,9 @@ export function QuotaInsightPage() {
                   className={cn(
                     'w-full text-left border rounded-xl p-4 space-y-3 transition-shadow',
                     surface.bg,
-                    'hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400',
+                    'hover:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400',
                     cardBorder,
-                    isSelected && 'ring-2 ring-indigo-400 border-indigo-300 shadow-sm',
+                    isSelected && 'ring-2 ring-primary-400 border-primary-300 shadow-sm',
                   )}
                 >
                   <div className="flex items-start justify-between gap-3">

@@ -36,15 +36,15 @@ def _detect_language(text: str) -> str:
 def _closure_prefix(label: str, lang: str) -> str:
     if lang == 'korean':
         return (
-            f'【중요】더 이상 {label} 조건의 새 응답자를 받지 않습니다. '
+            f'【중요】더 이상 {label} 조건의 신규 통화를 진행하지 않습니다. '
             f'통화 중 상대방이 {label} 조건에 해당할 경우 다음과 같이 말하고 통화를 종료하세요: '
-            f'"감사합니다. 귀하가 속한 {label} 조건의 조사가 이미 완료되었습니다. '
+            f'"감사합니다. 귀하가 속한 {label} 조건의 접수가 이미 완료되었습니다. '
             f'다음에도 협조해 주시기 바랍니다."'
         )
     return (
-        f'【重要】不再接受{label}的新受访者。'
+        f'【重要】不再受理{label}的新通话。'
         f'如果当前通话中对方符合{label}条件，请告知对方：'
-        f'"感谢您，您所在的{label}的调查已经结束了，下次请您继续配合。"，然后礼貌结束通话。'
+        f'"感谢您，您所在的{label}名额已满，下次请您继续配合。"，然后礼貌结束通话。'
     )
 
 
@@ -94,8 +94,8 @@ async def notify_quota_reached(
     lang = _detect_language(current_content)
 
     # Idempotency: skip if this label's closure message is already in the prompt
-    already_zh = f'不再接受{cell_label}' in current_content
-    already_ko = f'{cell_label} 조건의 새 응답자를 받지 않습니다' in current_content
+    already_zh = f'不再受理{cell_label}' in current_content
+    already_ko = f'{cell_label} 조건의 신규 통화를 진행하지 않습니다' in current_content
     if already_zh or already_ko:
         logger.info(
             'notify_quota_reached: label %r already in system prompt, skipping', cell_label,

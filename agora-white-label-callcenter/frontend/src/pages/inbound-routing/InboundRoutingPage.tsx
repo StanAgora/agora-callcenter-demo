@@ -148,7 +148,7 @@ function Toggle({
         onClick={() => onChange(!checked)}
         className={cn(
           'relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none',
-          checked ? 'bg-indigo-600' : 'bg-gray-200',
+          checked ? 'bg-primary-600' : 'bg-gray-200',
         )}
       >
         <span
@@ -384,7 +384,7 @@ export function InboundRoutingPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => openBind(entry)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-indigo-600 hover:bg-indigo-50 transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium text-primary-600 hover:bg-primary-50 transition-colors"
                           >
                             {entry.binding ? (
                               <><Link2 size={12} /> Edit Binding</>
@@ -460,7 +460,7 @@ export function InboundRoutingPage() {
                         <select
                           value={form.agent_id}
                           onChange={e => setForm(f => ({ ...f, agent_id: e.target.value }))}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                         >
                           <option value="">— Select an agent —</option>
                           {agents.map(a => (
@@ -506,7 +506,7 @@ export function InboundRoutingPage() {
                             type="number" min={0}
                             value={form.end_call_config.max_call_duration_seconds}
                             onChange={e => updateEndCall('max_call_duration_seconds', Number(e.target.value))}
-                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                           />
                         </div>
                         <div>
@@ -515,7 +515,7 @@ export function InboundRoutingPage() {
                             type="number" min={0}
                             value={form.end_call_config.silence_timeout_seconds}
                             onChange={e => updateEndCall('silence_timeout_seconds', Number(e.target.value))}
-                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                           />
                         </div>
                         <div>
@@ -524,7 +524,7 @@ export function InboundRoutingPage() {
                             type="number" min={0}
                             value={form.end_call_config.ring_timeout_seconds}
                             onChange={e => updateEndCall('ring_timeout_seconds', Number(e.target.value))}
-                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                           />
                         </div>
                       </div>
@@ -587,7 +587,7 @@ export function InboundRoutingPage() {
                                 },
                               }))}
                               placeholder="e.g. Call has been answered"
-                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                             />
                           </div>
 
@@ -598,7 +598,7 @@ export function InboundRoutingPage() {
                               <button
                                 type="button"
                                 onClick={addEvaluation}
-                                className="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                                className="inline-flex items-center gap-1 text-xs text-primary-600 hover:text-primary-700 font-medium"
                               >
                                 <Plus size={12} /> Add
                               </button>
@@ -633,7 +633,7 @@ export function InboundRoutingPage() {
                                         value={ev.variable_name}
                                         onChange={e => updateEvaluation(idx, { variable_name: e.target.value })}
                                         placeholder="Q1"
-                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                                       />
                                     </div>
                                     <div>
@@ -644,7 +644,7 @@ export function InboundRoutingPage() {
                                           type: e.target.value as 'number' | 'boolean' | 'string',
                                           enums: e.target.value !== 'string' ? [] : ev.enums,
                                         })}
-                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                                       >
                                         <option value="string">string</option>
                                         <option value="number">number</option>
@@ -660,7 +660,7 @@ export function InboundRoutingPage() {
                                       value={ev.criteria}
                                       onChange={e => updateEvaluation(idx, { criteria: e.target.value })}
                                       placeholder="e.g. User's age"
-                                      className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                                      className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                                     />
                                   </div>
 
@@ -679,7 +679,7 @@ export function InboundRoutingPage() {
                                             .filter(Boolean),
                                         })}
                                         placeholder="Toyota, Honda, BYD"
-                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                                        className="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                                       />
                                     </div>
                                   )}
@@ -725,7 +725,7 @@ export function InboundRoutingPage() {
                                 transfer_config: { ...f.transfer_config, phone_number: e.target.value },
                               }))}
                               placeholder="+18860027209"
-                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                             />
                           </div>
                           <div>
@@ -738,7 +738,7 @@ export function InboundRoutingPage() {
                                 transfer_config: { ...f.transfer_config, description: e.target.value },
                               }))}
                               placeholder="e.g. when user wants to talk to a human agent"
-                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                             />
                           </div>
                         </>
@@ -769,7 +769,7 @@ export function InboundRoutingPage() {
                     disabled={submitting}
                     className={cn(
                       'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                      submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700',
+                      submitting ? 'bg-primary-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700',
                     )}
                   >
                     {submitting && <Loader2 size={14} className="animate-spin" />}
