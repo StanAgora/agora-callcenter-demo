@@ -94,6 +94,11 @@ agora-white-label-callcenter/
 
 ## Quick Start
 
+> **Requirements:** Node 18+ and Python 3.11–3.13 (recommended).
+> On **Python 3.14**, bump `sqlalchemy` to `>=2.0.43` in `requirements.txt` first — the older pin crashes on 3.14.
+
+The demo runs **entirely on SQLite with no external services and no API keys**. AI and voice features stay inert until you add keys (see [Environment Variables](#environment-variables-backendenv)).
+
 ### 1. Clone
 
 ```bash
@@ -101,36 +106,38 @@ git clone <repo-url>
 cd agora-white-label-callcenter
 ```
 
-### 2. Backend
+### 2. Backend → http://localhost:8000
 
 ```bash
 cd backend
-cp .env.example .env        # Fill in API keys and other config
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-# Backend runs at http://localhost:8000
 ```
 
-SQLite is used in development (`dev.db` is created automatically on first run). Switch `DATABASE_URL` to PostgreSQL for production.
+By default the app uses **SQLite** (`dev.db`, created automatically on first run) — **no `.env` is needed to run the demo.**
 
-#### Seed sample data (optional)
+> ⚠️ Do **not** run `cp .env.example .env` unless you have PostgreSQL running: that template points `DATABASE_URL` at Postgres and the backend will fail to start. Only create a `.env` to add API keys or change the database (see [Environment Variables](#environment-variables-backendenv)).
 
-```bash
-cd backend
-python seed.py
-# Inserts a few sample campaigns (with full prompt + schema)
-```
-
-### 3. Frontend
+### 3. Frontend → http://localhost:5173
 
 ```bash
 cd frontend
-npm install                 # or pnpm install
+npm install --legacy-peer-deps   # --legacy-peer-deps avoids a recharts / React 19 peer conflict
 npm run dev
-# Frontend runs at http://localhost:5173
 ```
 
-The demo login defaults to `demo` / `demo` (configurable — see Branding).
+### 4. Open the demo
+
+Go to **http://localhost:5173** and sign in with **`demo` / `demo`** (configurable — see [Branding](#branding)).
+
+The database starts empty, so the campaign / agent / phone-number lists show their empty states. For a fully populated real-time view with **no setup at all**, open the built-in mock dashboard:
+
+```
+http://localhost:5173/surveys/survey-001/dashboard
+```
+
+To create real campaigns and use AI script generation, add `ANTHROPIC_API_KEY` (and the Agora keys for live calls) to `backend/.env` and restart the backend.
 
 ---
 
@@ -158,14 +165,19 @@ The theme color is applied at runtime as CSS variables (`--brand-primary`), so c
 
 ## Environment Variables (`backend/.env`)
 
+`backend/.env` is **optional** — every setting has a default (see `app/core/config.py`), and the defaults run the demo on SQLite with all features inert. Create a `.env` only to switch the database or enable AI / voice features. A template lives in `backend/.env.example` (note: it defaults `DATABASE_URL` to PostgreSQL).
+
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `DATABASE_URL` | `sqlite+aiosqlite:///./dev.db` | Database connection (PostgreSQL in production) |
-| `ANTHROPIC_API_KEY` | — | Claude API key (required for AI features) |
-| `VOICE_AGENT_BASE_URL` | `http://localhost:9000` | Voice platform REST base URL |
-| `VOICE_AGENT_API_KEY` | — | Voice platform auth key |
-| `WEBHOOK_SECRET` | `changeme` | HMAC signing key for result callbacks |
-| `POLL_INTERVAL_SECONDS` | `5` | How often to poll the voice platform (seconds) |
+| `DATABASE_URL` | `sqlite+aiosqlite:///./dev.db` | DB connection. SQLite for dev; `postgresql+asyncpg://…` for production |
+| `ANTHROPIC_API_KEY` | _(empty)_ | Claude API key — required for AI prompt & quota generation |
+| `AGORA_CONVERSATIONAL_API_KEY` | _(empty)_ | Base64-encoded Agora Conversational AI key — required for live outbound calls |
+| `AGORA_PROJECT_ID` | _(demo id)_ | Agora project ID |
+| `AGORA_CONVERSATIONAL_BASE_URL` | `https://api.agora.io/conversational-ai/v2` | Agora Conversational AI base URL |
+| `OPENAI_API_KEY` | _(empty)_ | Used for transcript-based quota extraction |
+| `QUOTA_TRANSCRIPT_MODEL` | `gpt-4o-mini` | Model for transcript quota evaluation |
+| `QUOTA_TRANSCRIPT_MIN_CONFIDENCE` | `0.5` | Minimum confidence (0–1) to accept an extracted quota value |
+| `POLL_INTERVAL_SECONDS` | `5` | How often to poll for call status (seconds) |
 | `MAX_CONCURRENT_CALLS` | `10` | Maximum concurrent outbound calls |
 
 ---
@@ -219,14 +231,11 @@ Campaign done   → status = completed → triggers webhook delivery
 ## Development Commands
 
 ```bash
-# Backend smoke check
-cd backend && python -m py_compile app/main.py
+# Backend smoke check (venv activated)
+cd backend && python -c "from app.main import app"
 
 # Frontend type-check
-cd frontend && npx tsc --noEmit
-
-# Frontend build
-cd frontend && npm run build
+cd frontend && npm run build   # runs tsc -b + vite build (authoritative)
 ```
 
 ---
