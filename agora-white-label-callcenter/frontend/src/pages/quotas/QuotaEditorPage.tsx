@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Brain, Loader2, AlertCircle, ChevronLeft, CheckCircle2, Wand2, Save, Phone, Upload, CheckCircle } from 'lucide-react'
+import { Brain, Loader2, AlertCircle, ChevronLeft, CheckCircle2, Wand2, Save, Phone, Upload } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 const PHONE_RE = /^\+\d{7,15}$/
@@ -245,7 +245,7 @@ export function QuotaEditorPage() {
           {saveState === 'idle' && cells.length > 0 && (
             <button
               onClick={() => saveCells(cells)}
-              className="inline-flex items-center gap-1 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Save size={11} /> {t('common.save')}
             </button>
@@ -309,7 +309,7 @@ export function QuotaEditorPage() {
           <button
             onClick={handleAiSuggest}
             disabled={aiLoading}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white rounded-lg text-xs font-medium hover:bg-indigo-700 disabled:opacity-60 transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-medium hover:bg-primary-700 disabled:opacity-60 transition-colors flex-shrink-0"
           >
             {aiLoading ? <Loader2 size={13} className="animate-spin" /> : <Brain size={13} />}
             {aiLoading ? t('quota_editor.btn_ai_analyzing') : cells.length > 0 ? t('quota_editor.btn_ai_re_suggest') : t('quota_editor.btn_ai_suggest')}
@@ -318,7 +318,7 @@ export function QuotaEditorPage() {
 
         {aiResult && (
           <div className="mt-3 pt-3 border-t border-gray-100 space-y-1.5">
-            <p className="text-xs text-indigo-700">
+            <p className="text-xs text-primary-700">
               <span className="font-medium">{t('quota_editor.label_target_pop')}:</span> {aiResult.target_population}
             </p>
             {aiResult.screening_rules.length > 0 && (
@@ -349,7 +349,7 @@ export function QuotaEditorPage() {
           onChange={e => setRequirements(e.target.value)}
           placeholder={t('quota_editor.req_placeholder')}
           rows={3}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white resize-none"
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white resize-none"
         />
         {reqError && (
           <p className="mt-1 text-xs text-red-600 flex items-center gap-1"><AlertCircle size={11} />{reqError}</p>
@@ -462,7 +462,7 @@ export function QuotaEditorPage() {
                                 value={cell.target}
                                 onChange={e => handleTargetChange(cell.id, e.target.value)}
                                 disabled={cell.status === 'closed'}
-                                className="w-full text-xs border border-gray-200 rounded-md px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-transparent disabled:opacity-50 disabled:bg-transparent text-gray-700 min-w-0 bg-white"
+                                className="w-full text-xs border border-gray-200 rounded-md px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 disabled:bg-transparent text-gray-700 min-w-0 bg-white"
                               />
                             </div>
                           </div>
@@ -490,7 +490,7 @@ export function QuotaEditorPage() {
           ) : (
             <Link
               to={`/surveys/${id}/dashboard`}
-              className="inline-flex items-center gap-2 px-5 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
             >
               {t('quota_editor.to_dashboard')}
             </Link>

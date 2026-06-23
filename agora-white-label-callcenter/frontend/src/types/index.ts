@@ -48,18 +48,21 @@ export interface QuotaAiSuggestion {
 export type CallResultCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 export type CallStatus = 'pending' | 'in_progress' | 'success' | 'failed' | 'quota_full' | 'ineligible'
 
+// Canonical (English) call-outcome labels. The dashboard renders localized
+// versions via the `dashboard.result_<code>` i18n keys; this map is the
+// language-neutral fallback / source of truth for the numeric result codes.
 export const CALL_RESULT_LABELS: Record<number, string> = {
-  0: '조사성공',
-  1: '결번',
-  2: '기업체/FAX',
-  3: '강력거절',
-  4: '거절',
-  5: '비수신',
-  6: '통화중',
-  7: '대상아님',
-  8: '쿼터오버',
-  9: '중도포기',
-  10: '기타',
+  0: 'Completed',
+  1: 'Invalid Number',
+  2: 'Business/Fax',
+  3: 'Declined',
+  4: 'Soft Decline',
+  5: 'No Answer',
+  6: 'Busy',
+  7: 'Not Eligible',
+  8: 'Quota Full',
+  9: 'Abandoned',
+  10: 'Other',
 }
 
 export interface TranscriptLine {

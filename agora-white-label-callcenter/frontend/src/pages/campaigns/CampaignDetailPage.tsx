@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useTranslation, type TFunction } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
+import type { TFunction } from 'i18next'
 import {
   ArrowLeft, Loader2, StopCircle, RefreshCw, Phone, MessageSquare, Database, Download, X,
   PhoneCall, PhoneOutgoing, Voicemail, PhoneMissed, CircleAlert, Timer,
@@ -97,7 +98,7 @@ const STATUS_STYLE: Record<string, string> = {
   interrupted: 'bg-red-50 text-red-600',
   interrupt:   'bg-red-50 text-red-600',
   running:     'bg-emerald-50 text-emerald-700',
-  scheduled:   'bg-indigo-50 text-indigo-700',
+  scheduled:   'bg-primary-50 text-primary-700',
   paused:      'bg-amber-50 text-amber-700',
   pending:     'bg-gray-100 text-gray-500',
 }
@@ -142,11 +143,6 @@ function fmtDurationHms(totalSeconds: number) {
 function fmtDateLocale(s: string | null, lng: string) {
   if (!s) return '—'
   return new Date(s).toLocaleString(bcp47ForI18n(lng))
-}
-
-function fmtTsLocale(ts: number | null, lng: string) {
-  if (!ts) return '—'
-  return new Date(ts * 1000).toLocaleString(bcp47ForI18n(lng))
 }
 
 function isCampaignTerminalStatus(status: string | null | undefined) {
@@ -455,10 +451,10 @@ export function CampaignDetailPage() {
     if (c.includes('answered')) return { dot: 'bg-emerald-500', text: 'text-emerald-700' }
     if (c.includes('transferred_success') || c.includes('transfer_success')) return { dot: 'bg-emerald-600', text: 'text-emerald-700' }
     if (c.includes('transferred_failed') || c.includes('transfer_failed')) return { dot: 'bg-red-400', text: 'text-red-600' }
-    if (c.includes('voicemail')) return { dot: 'bg-indigo-400', text: 'text-indigo-600' }
+    if (c.includes('voicemail')) return { dot: 'bg-primary-400', text: 'text-primary-600' }
     if (c.includes('no_answer') || c === 'no-answer') return { dot: 'bg-amber-500', text: 'text-amber-700' }
     if (c.includes('failed') || c.includes('error')) return { dot: 'bg-red-500', text: 'text-red-600' }
-    if (c.includes('ai_assistant') || c.includes('ai-assistant')) return { dot: 'bg-indigo-500', text: 'text-indigo-600' }
+    if (c.includes('ai_assistant') || c.includes('ai-assistant')) return { dot: 'bg-primary-500', text: 'text-primary-600' }
     return { dot: 'bg-gray-300', text: 'text-gray-500' }
   }
 
@@ -506,10 +502,10 @@ export function CampaignDetailPage() {
             <h1 className="text-lg font-bold text-gray-900 truncate">{campaign.campaign_name}</h1>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <span className={cn('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', STATUS_STYLE[status] ?? 'bg-gray-100 text-gray-500')}>
-                {statusLabel[status] ?? status}
+                {(statusLabel as Record<string, string>)[status] ?? status}
               </span>
               {campaign.questionnaire_type && (
-                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-700">
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-primary-50 text-primary-700">
                   {campaignAgentSourceLabel(t, campaign.questionnaire_type)}
                 </span>
               )}
@@ -564,11 +560,11 @@ export function CampaignDetailPage() {
               className={cn(
                 'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'all'
-                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  ? 'border-primary-500 ring-1 ring-primary-200/80 bg-primary-50/30'
                   : 'border-gray-100 hover:bg-gray-50',
               )}
             >
-              <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-600">
+              <div className="mt-0.5 rounded-md bg-primary-50 p-1.5 text-primary-600">
                 <PhoneOutgoing size={14} />
               </div>
               <div className="min-w-0">
@@ -584,7 +580,7 @@ export function CampaignDetailPage() {
               className={cn(
                 'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'answered'
-                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  ? 'border-primary-500 ring-1 ring-primary-200/80 bg-primary-50/30'
                   : 'border-gray-100 hover:bg-gray-50',
               )}
             >
@@ -604,11 +600,11 @@ export function CampaignDetailPage() {
               className={cn(
                 'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'voicemail'
-                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  ? 'border-primary-500 ring-1 ring-primary-200/80 bg-primary-50/30'
                   : 'border-gray-100 hover:bg-gray-50',
               )}
             >
-              <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-500">
+              <div className="mt-0.5 rounded-md bg-primary-50 p-1.5 text-primary-500">
                 <Voicemail size={14} />
               </div>
               <div className="min-w-0">
@@ -624,7 +620,7 @@ export function CampaignDetailPage() {
               className={cn(
                 'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'no_answer'
-                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  ? 'border-primary-500 ring-1 ring-primary-200/80 bg-primary-50/30'
                   : 'border-gray-100 hover:bg-gray-50',
               )}
             >
@@ -644,7 +640,7 @@ export function CampaignDetailPage() {
               className={cn(
                 'flex w-full items-start gap-2 rounded-xl border bg-white px-3 py-2.5 text-left shadow-sm transition-colors cursor-pointer',
                 callCategoryFilter === 'failed'
-                  ? 'border-indigo-500 ring-1 ring-indigo-200/80 bg-indigo-50/30'
+                  ? 'border-primary-500 ring-1 ring-primary-200/80 bg-primary-50/30'
                   : 'border-gray-100 hover:bg-gray-50',
               )}
             >
@@ -659,7 +655,7 @@ export function CampaignDetailPage() {
               </div>
             </button>
             <div className="flex items-start gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2.5 shadow-sm">
-              <div className="mt-0.5 rounded-md bg-indigo-50 p-1.5 text-indigo-500">
+              <div className="mt-0.5 rounded-md bg-primary-50 p-1.5 text-primary-500">
                 <Timer size={14} />
               </div>
               <div className="min-w-0">
@@ -685,7 +681,7 @@ export function CampaignDetailPage() {
                   </div>
                   <div className="mt-1.5 h-2 rounded-full bg-gray-100 overflow-hidden">
                     <div
-                      className="h-full bg-indigo-500 rounded-full transition-[width] duration-300"
+                      className="h-full bg-primary-500 rounded-full transition-[width] duration-300"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -739,7 +735,7 @@ export function CampaignDetailPage() {
                 <InfoRow label={t('agora.label_max_ring')} value={fmtSecondsI18n(t, campaign.ring_timeout_seconds)} />
               </Card>
 
-              {campaign.structured_output && (
+              {Boolean(campaign.structured_output) && (
                 <Card title="Structured Output">
                   <pre className="text-xs text-gray-600 bg-gray-50 rounded-lg p-3 overflow-x-auto leading-relaxed border border-gray-100">
                     {JSON.stringify(campaign.structured_output, null, 2)}
@@ -753,7 +749,7 @@ export function CampaignDetailPage() {
           <div className="flex-1 overflow-y-auto bg-white">
             <div className="px-4 py-3 border-b border-gray-100 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <Phone size={16} className="text-indigo-600 flex-shrink-0" />
+                <Phone size={16} className="text-primary-600 flex-shrink-0" />
                 <h2 className="text-sm font-semibold text-gray-900">{t('agora.call_log')}</h2>
                 <span className="text-xs text-gray-400">{t('agora.calls_n', { n: callsTotal })}</span>
               </div>
@@ -945,7 +941,7 @@ export function CampaignDetailPage() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
               <div className="flex items-center gap-2">
-                <MessageSquare size={16} className="text-indigo-600" />
+                <MessageSquare size={16} className="text-primary-600" />
                 <span className="text-sm font-semibold text-gray-900">{t('agora.modal_transcript')}</span>
                 <span className="text-xs text-gray-400 font-mono">{activeTranscript.call_id}</span>
               </div>
@@ -963,7 +959,7 @@ export function CampaignDetailPage() {
                     'max-w-[78%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap',
                     m.role === 'assistant'
                       ? 'bg-white text-gray-900 border border-gray-100 rounded-tl-sm'
-                      : 'bg-indigo-600 text-white rounded-tr-sm'
+                      : 'bg-primary-600 text-white rounded-tr-sm'
                   )}>
                     {m.content}
                   </div>

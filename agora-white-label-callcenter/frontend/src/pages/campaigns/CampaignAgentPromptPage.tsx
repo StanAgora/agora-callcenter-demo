@@ -93,7 +93,7 @@ export function CampaignAgentPromptPage() {
   if (loading) {
     return (
       <div className="flex h-full min-h-[40vh] items-center justify-center text-gray-400">
-        <Loader2 size={22} className="mr-2 animate-spin text-indigo-600" />
+        <Loader2 size={22} className="mr-2 animate-spin text-primary-600" />
         <span className="text-sm">{t('campaign_agent_prompt.loading')}</span>
       </div>
     )
@@ -128,7 +128,7 @@ export function CampaignAgentPromptPage() {
             {t('campaign_agent_prompt.back_campaign')}
           </Link>
           <h1 className="flex items-center gap-2 text-lg font-semibold text-gray-900">
-            <Bot className="h-5 w-5 text-indigo-600" />
+            <Bot className="h-5 w-5 text-primary-600" />
             {t('campaign_agent_prompt.title')}
           </h1>
           <p className="mt-0.5 text-sm text-gray-400">
@@ -144,7 +144,7 @@ export function CampaignAgentPromptPage() {
           disabled={updating}
           className={cn(
             'inline-flex flex-shrink-0 items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors',
-            updating ? 'cursor-not-allowed bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700',
+            updating ? 'cursor-not-allowed bg-primary-400' : 'bg-primary-600 hover:bg-primary-700',
           )}
         >
           {updating && <Loader2 size={16} className="animate-spin" />}

@@ -1,19 +1,18 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import {
-  Upload, FileSpreadsheet, Globe, Brain, Pencil, Plus, Trash2, Bot,
+  Upload, FileSpreadsheet, Globe, Plus, Trash2, Bot,
   CheckCircle2, Phone, AlertCircle, Download, Loader2, Sparkles,
   RefreshCw, AlignJustify, LayoutList, ChevronDown, Mic, VolumeX,
-  Wand2, Info,
+  Info,
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 const API = 'http://localhost:8000'
 
 type UploadMethod = 'file_upload' | 'url_load'
-type QuotaMethod  = 'ai_auto' | 'manual'
 
 interface PhoneNumberOption { number_id: string; name: string; phone_number: string }
 interface AgentOption { agent_id: string; agent_name: string }
@@ -42,11 +41,11 @@ const GREETING_KEY = 'greeting'
 const FAILURE_MESSAGE_KEY = 'failure_message'
 
 const SECTION_COLORS: Record<string, { header: string; border: string; badge: string }> = {
-  greeting:        { header: 'bg-white hover:bg-gray-50', border: 'border-indigo-300', badge: 'bg-indigo-50 text-indigo-600' },
+  greeting:        { header: 'bg-white hover:bg-gray-50', border: 'border-primary-300', badge: 'bg-primary-50 text-primary-600' },
   failure_message: { header: 'bg-white hover:bg-gray-50', border: 'border-gray-300',   badge: 'bg-gray-100 text-gray-600' },
-  core_guidelines:        { header: 'bg-white hover:bg-gray-50', border: 'border-indigo-400', badge: 'bg-indigo-50 text-indigo-600' },
-  global_execution_logic: { header: 'bg-white hover:bg-gray-50', border: 'border-indigo-300', badge: 'bg-indigo-50 text-indigo-600' },
-  question_sop:           { header: 'bg-white hover:bg-gray-50', border: 'border-indigo-200', badge: 'bg-indigo-50 text-indigo-600' },
+  core_guidelines:        { header: 'bg-white hover:bg-gray-50', border: 'border-primary-400', badge: 'bg-primary-50 text-primary-600' },
+  global_execution_logic: { header: 'bg-white hover:bg-gray-50', border: 'border-primary-300', badge: 'bg-primary-50 text-primary-600' },
+  question_sop:           { header: 'bg-white hover:bg-gray-50', border: 'border-primary-200', badge: 'bg-primary-50 text-primary-600' },
 }
 
 // Section labels keyed by TTS language — shown in the sections accordion header
@@ -301,7 +300,7 @@ function QuotaCellTable({
                     value={cell.label}
                     onChange={e => onUpdate(cell.id, 'label', e.target.value)}
                     placeholder={t('nc_wiz.filter_ph')}
-                    className="w-full text-sm text-gray-700 border border-gray-200 rounded-lg px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full text-sm text-gray-700 border border-gray-200 rounded-lg px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 ) : (
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -323,7 +322,7 @@ function QuotaCellTable({
                   min={0}
                   value={cell.target}
                   onChange={e => onUpdate(cell.id, 'target', Number(e.target.value))}
-                  className="w-full text-sm text-gray-700 text-center border border-gray-200 rounded-lg px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full text-sm text-gray-700 text-center border border-gray-200 rounded-lg px-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
               {/* Delete */}
@@ -343,7 +342,7 @@ function QuotaCellTable({
       <div className="flex items-center justify-between px-4 py-2.5 border-t border-gray-200 bg-gray-50">
         <button
           onClick={onAdd}
-          className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 transition-colors"
+          className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700 transition-colors"
         >
           <Plus size={12} /> {t('nc_wiz.add_row')}
         </button>
@@ -769,7 +768,7 @@ export function NewSurveyPage() {
   }
 
   // ── Step indicator ──────────────────────────────────────────────────────────
-  const displayStep = visibleSteps.indexOf(step) + 1  // 1-based display position
+  const displayStep = (visibleSteps as readonly number[]).indexOf(step) + 1  // 1-based display position
 
   return (
     <div className={cn('p-8 mx-auto bg-gray-50 min-h-screen',
@@ -790,8 +789,8 @@ export function NewSurveyPage() {
                 <div className="flex flex-col items-center flex-shrink-0">
                   <div className={cn(
                     'w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold',
-                    current ? 'bg-indigo-600 text-white' :
-                    done    ? 'bg-indigo-100 text-indigo-600' :
+                    current ? 'bg-primary-600 text-white' :
+                    done    ? 'bg-primary-100 text-primary-600' :
                               'bg-gray-100 text-gray-400'
                   )}>
                     {done ? <CheckCircle2 size={14} /> : i + 1}
@@ -805,7 +804,7 @@ export function NewSurveyPage() {
                 </div>
                 {/* Connector line (not after last item) */}
                 {i < visibleSteps.length - 1 && (
-                  <div className={cn('flex-1 h-px mt-3.5 mx-1', displayStep > i + 1 ? 'bg-indigo-300' : 'bg-gray-200')} />
+                  <div className={cn('flex-1 h-px mt-3.5 mx-1', displayStep > i + 1 ? 'bg-primary-300' : 'bg-gray-200')} />
                 )}
               </div>
             )
@@ -823,7 +822,7 @@ export function NewSurveyPage() {
             <input
               type="text" value={campaignName} onChange={e => setCampaignName(e.target.value)}
               placeholder={t('nc_wiz.campaign_name_ph')}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
             />
           </div>
 
@@ -835,7 +834,7 @@ export function NewSurveyPage() {
             <select
               value={selectedPhoneId}
               onChange={e => setSelectedPhoneId(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
             >
               <option value="">{t('nc_wiz.select_phone')}</option>
               {phoneNumbers.map(p => (
@@ -861,16 +860,16 @@ export function NewSurveyPage() {
                 className={cn(
                   'flex flex-col items-start gap-2 rounded-xl border-2 p-4 text-left transition-all',
                   agentPath === 'new'
-                    ? 'border-indigo-500 bg-indigo-50 shadow-sm'
-                    : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50',
+                    ? 'border-primary-500 bg-primary-50 shadow-sm'
+                    : 'border-gray-200 hover:border-primary-300 hover:bg-gray-50',
                 )}
               >
                 <div className="flex w-full items-start gap-3">
                   <div className={cn(
                     'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
-                    agentPath === 'new' ? 'bg-indigo-100' : 'bg-gray-100'
+                    agentPath === 'new' ? 'bg-primary-100' : 'bg-gray-100'
                   )}>
-                    <Sparkles size={20} className={agentPath === 'new' ? 'text-indigo-600' : 'text-gray-400'} />
+                    <Sparkles size={20} className={agentPath === 'new' ? 'text-primary-600' : 'text-gray-400'} />
                   </div>
                   <div className="min-w-0">
                     <p className="text-sm font-semibold text-gray-900">
@@ -887,7 +886,7 @@ export function NewSurveyPage() {
                 className={cn(
                   'flex flex-col rounded-xl border-2 p-4 transition-all',
                   agentPath === 'existing' || (selectedAgentId && selectedAgentId !== '__new__')
-                    ? 'border-indigo-500 bg-indigo-50/60 shadow-sm'
+                    ? 'border-primary-500 bg-primary-50/60 shadow-sm'
                     : 'border-gray-200',
                 )}
               >
@@ -907,9 +906,9 @@ export function NewSurveyPage() {
                   <div className="flex w-full items-start gap-3">
                     <div className={cn(
                       'flex h-10 w-10 shrink-0 items-center justify-center rounded-lg',
-                      agentPath === 'existing' ? 'bg-indigo-100' : 'bg-gray-100'
+                      agentPath === 'existing' ? 'bg-primary-100' : 'bg-gray-100'
                     )}>
-                      <Bot size={20} className={agentPath === 'existing' ? 'text-indigo-600' : 'text-gray-400'} />
+                      <Bot size={20} className={agentPath === 'existing' ? 'text-primary-600' : 'text-gray-400'} />
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-gray-900">
@@ -937,7 +936,7 @@ export function NewSurveyPage() {
                     disabled={selectedAgentId === '__new__'}
                     className={cn(
                       'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm',
-                      'focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent',
+                      'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
                       selectedAgentId === '__new__' && 'cursor-not-allowed bg-gray-50 text-gray-400',
                     )}
                   >
@@ -963,7 +962,7 @@ export function NewSurveyPage() {
                   <select
                     value={ttsLang}
                     onChange={e => handleTtsLangChange(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     {TTS_OPTIONS.map(o => (
                       <option key={o.lang} value={o.lang}>{o.label}</option>
@@ -975,7 +974,7 @@ export function NewSurveyPage() {
                   <select
                     value={ttsVoiceId}
                     onChange={e => setTtsVoiceId(e.target.value)}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     {(TTS_OPTIONS.find(o => o.lang === ttsLang)?.voices ?? []).map(v => (
                       <option key={v} value={v}>{v}</option>
@@ -1010,12 +1009,12 @@ export function NewSurveyPage() {
                   <button key={value} onClick={() => setUploadMethod(value)}
                     className={cn('flex items-center gap-3 p-4 rounded-lg border-2 text-left transition-colors',
                       uploadMethod === value
-                        ? 'border-indigo-500 bg-indigo-50'
+                        ? 'border-primary-500 bg-primary-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                     )}>
-                    <Icon size={20} className={uploadMethod === value ? 'text-indigo-600' : 'text-gray-400'} />
+                    <Icon size={20} className={uploadMethod === value ? 'text-primary-600' : 'text-gray-400'} />
                     <div>
-                      <p className={cn('text-sm font-semibold', uploadMethod === value ? 'text-indigo-700' : 'text-gray-700')}>{label}</p>
+                      <p className={cn('text-sm font-semibold', uploadMethod === value ? 'text-primary-700' : 'text-gray-700')}>{label}</p>
                       <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
                     </div>
                   </button>
@@ -1028,7 +1027,7 @@ export function NewSurveyPage() {
             type="button"
             onClick={nextFromStep1}
             disabled={!campaignName.trim() || !selectedPhoneId || !selectedAgentId}
-            className="w-full py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             {t('common.next')}
           </button>
@@ -1048,7 +1047,7 @@ export function NewSurveyPage() {
                 {t('new_survey.label_oqd_url')}
               </label>
               <input type="url" value={surveyUrl} onChange={e => setSurveyUrl(e.target.value)} placeholder="https://..."
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white" />
               <p className="text-xs text-gray-400 mt-1.5">{t('nc_wiz.oqd_euc')}</p>
             </div>
           ) : (
@@ -1060,15 +1059,15 @@ export function NewSurveyPage() {
               className={cn(
                 'border-2 border-dashed rounded-xl p-10 text-center transition-colors cursor-pointer',
                 surveyFileDragging
-                  ? 'border-indigo-300 bg-indigo-50'
+                  ? 'border-primary-300 bg-primary-50'
                   : surveyFile
-                    ? 'border-indigo-200 bg-indigo-50/50'
-                    : 'border-gray-200 bg-gray-50 hover:border-indigo-300 hover:bg-indigo-50'
+                    ? 'border-primary-200 bg-primary-50/50'
+                    : 'border-gray-200 bg-gray-50 hover:border-primary-300 hover:bg-primary-50'
               )}>
-              <Upload size={28} className={cn('mx-auto mb-3', surveyFile ? 'text-indigo-400' : 'text-gray-400')} />
+              <Upload size={28} className={cn('mx-auto mb-3', surveyFile ? 'text-primary-400' : 'text-gray-400')} />
               {surveyFile ? (
                 <div>
-                  <span className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg px-3 py-1.5 text-sm font-medium">
+                  <span className="inline-flex items-center gap-2 bg-primary-50 text-primary-700 border border-primary-200 rounded-lg px-3 py-1.5 text-sm font-medium">
                     <FileSpreadsheet size={14} />
                     {surveyFile.name}
                   </span>
@@ -1091,7 +1090,7 @@ export function NewSurveyPage() {
               {t('common.prev')}
             </button>
             <button onClick={nextFromStep2}
-              className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors">
+              className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors">
               {t('common.next')}
             </button>
           </div>
@@ -1104,7 +1103,7 @@ export function NewSurveyPage() {
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-white flex-shrink-0">
             <div className="flex items-center gap-2">
-              <Sparkles size={16} className="text-indigo-600" />
+              <Sparkles size={16} className="text-primary-600" />
               <h2 className="font-semibold text-gray-900">{t('nc_wiz.title_ai_prompt')}</h2>
               {surveyFile && (
                 <span className="text-xs text-gray-400 font-normal ml-1">— {surveyFile.name}</span>
@@ -1133,7 +1132,7 @@ export function NewSurveyPage() {
               )}
               {(genState === 'idle' || genState === 'error') && (
                 <button onClick={handleGeneratePrompt} disabled={!surveyFile}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 transition-colors">
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-40 transition-colors">
                   <Sparkles size={14} /> {t('nc_wiz.gen_prompt')}
                 </button>
               )}
@@ -1183,7 +1182,7 @@ export function NewSurveyPage() {
             <div className="flex-1 flex flex-col overflow-hidden">
               <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 flex-shrink-0 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={12} className="text-indigo-500" />
+                  <Sparkles size={12} className="text-primary-500" />
                   <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
                     {t('nc_wiz.gen_out')}
                   </span>
@@ -1209,10 +1208,10 @@ export function NewSurveyPage() {
               {/* Generating — indigo streaming indicator */}
               {genState === 'generating' && (
                 <div className="flex flex-col items-center justify-center flex-1 gap-4">
-                  <div className="flex items-center gap-2 text-indigo-600">
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="flex items-center gap-2 text-primary-600">
+                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     <span className="ml-2 text-sm font-medium">{t('nc_wiz.streaming')}</span>
                   </div>
                   <div className="text-center">
@@ -1254,7 +1253,7 @@ export function NewSurveyPage() {
                           <div className="px-4 pb-4 pt-2 bg-white">
                             <textarea value={section.content} onChange={e => handleSectionChange(idx, e.target.value)}
                               rows={rowCount} spellCheck={false}
-                              className="w-full resize-none p-3 font-mono text-xs text-gray-700 leading-relaxed focus:outline-none bg-gray-50 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" />
+                              className="w-full resize-none p-3 font-mono text-xs text-gray-700 leading-relaxed focus:outline-none bg-gray-50 rounded-lg border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all" />
                           </div>
                         )}
                       </div>
@@ -1287,7 +1286,7 @@ export function NewSurveyPage() {
                 disabled={creatingAgent}
                 className={cn(
                   'flex-1 inline-flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                  creatingAgent ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+                  creatingAgent ? 'bg-primary-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'
                 )}
               >
                 {creatingAgent && <Loader2 size={14} className="animate-spin" />}
@@ -1335,7 +1334,7 @@ export function NewSurveyPage() {
                   <button
                     onClick={() => handleSelectQuotaMode('ai_auto')}
                     disabled={!surveyFile}
-                    className="flex flex-col gap-1 rounded-xl border-2 border-gray-200 p-4 text-left hover:border-indigo-400 hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="flex flex-col gap-1 rounded-xl border-2 border-gray-200 p-4 text-left hover:border-primary-400 hover:bg-primary-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <span className="text-sm font-semibold text-gray-900">{t('nc_wiz.mode_ai')}</span>
                     <span className="text-xs text-gray-400">{t('nc_wiz.mode_ai_d')}</span>
@@ -1343,7 +1342,7 @@ export function NewSurveyPage() {
                   </button>
                   <button
                     onClick={() => handleSelectQuotaMode('manual')}
-                    className="flex flex-col gap-1 rounded-xl border-2 border-gray-200 p-4 text-left hover:border-indigo-400 hover:bg-indigo-50 transition-colors"
+                    className="flex flex-col gap-1 rounded-xl border-2 border-gray-200 p-4 text-left hover:border-primary-400 hover:bg-primary-50 transition-colors"
                   >
                     <span className="text-sm font-semibold text-gray-900">{t('nc_wiz.mode_manual')}</span>
                     <span className="text-xs text-gray-400">{t('nc_wiz.mode_manual_d')}</span>
@@ -1358,7 +1357,7 @@ export function NewSurveyPage() {
                 {/* Analyzing */}
                 {quotaAIState === 'analyzing' && (
                   <div className="flex items-center gap-3 py-10 justify-center text-gray-400">
-                    <Loader2 size={20} className="animate-spin text-indigo-500" />
+                    <Loader2 size={20} className="animate-spin text-primary-500" />
                     <span className="text-sm">{t('nc_wiz.claude_working')}</span>
                   </div>
                 )}
@@ -1431,7 +1430,7 @@ export function NewSurveyPage() {
                           placeholder={[
                             t('nc_wiz.ex_n0'), t('nc_wiz.ex_n1'), t('nc_wiz.ex_n2'),
                           ][i] ?? t('nc_wiz.ex_n0')}
-                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                         />
                         <input
                           type="text"
@@ -1440,14 +1439,14 @@ export function NewSurveyPage() {
                           placeholder={[
                             t('nc_wiz.ex_v0'), t('nc_wiz.ex_v1'), t('nc_wiz.ex_v2'),
                           ][i] ?? t('nc_wiz.ex_v0')}
-                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                         />
                         <input
                           type="text"
                           value={v.aiPrompt}
                           onChange={e => updateQuotaVar(v.id, 'aiPrompt', e.target.value)}
                           placeholder={t('nc_wiz.ex_note')}
-                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+                          className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
                         />
                         <button
                           onClick={() => removeQuotaVar(v.id)}
@@ -1461,7 +1460,7 @@ export function NewSurveyPage() {
                   </div>
                   <button
                     onClick={addQuotaVar}
-                    className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 transition-colors"
+                    className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700 transition-colors"
                   >
                     <Plus size={12} /> {t('nc_wiz.add_var')}
                   </button>
@@ -1471,7 +1470,7 @@ export function NewSurveyPage() {
                 <button
                   onClick={handleGenerateCombinations}
                   disabled={!quotaVars.some(v => v.name.trim() && v.valuesRaw.trim())}
-                  className="w-full py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                 >
                   <Sparkles size={14} /> {t('nc_wiz.gen_cells')}
                 </button>
@@ -1506,7 +1505,7 @@ export function NewSurveyPage() {
             <button
               onClick={() => setStep(5)}
               disabled={!quotaSetupMode}
-              className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {quotaCells.length > 0
                 ? t('nc_wiz.confirm_next', { n: quotaCells.length })
@@ -1522,11 +1521,11 @@ export function NewSurveyPage() {
         <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6 space-y-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Phone size={18} className="text-indigo-600" />
+              <Phone size={18} className="text-primary-600" />
               <h2 className="font-semibold text-gray-900">{t('nc_wiz.step_5')}</h2>
             </div>
             <button onClick={downloadTemplate}
-              className="flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-700 border border-indigo-200 rounded-lg px-3 py-1.5 hover:bg-indigo-50 transition-colors">
+              className="flex items-center gap-1.5 text-xs text-primary-600 hover:text-primary-700 border border-primary-200 rounded-lg px-3 py-1.5 hover:bg-primary-50 transition-colors">
               <Download size={13} /> {t('new_survey.phone_download_template')}
             </button>
           </div>
@@ -1539,26 +1538,26 @@ export function NewSurveyPage() {
             className={cn(
               'border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer',
               phoneDragging
-                ? 'border-indigo-300 bg-indigo-50'
+                ? 'border-primary-300 bg-primary-50'
                 : csvResult?.valid
-                  ? 'border-indigo-200 bg-indigo-50/50'
+                  ? 'border-primary-200 bg-primary-50/50'
                   : csvResult && !csvResult.valid
                     ? 'border-red-200 bg-red-50/50'
-                    : 'border-gray-200 bg-gray-50 hover:border-indigo-300 hover:bg-indigo-50'
+                    : 'border-gray-200 bg-gray-50 hover:border-primary-300 hover:bg-primary-50'
             )}>
             <Upload size={24} className={cn('mx-auto mb-2',
-              csvResult?.valid           ? 'text-indigo-400' :
+              csvResult?.valid           ? 'text-primary-400' :
               csvResult && !csvResult.valid ? 'text-red-400' : 'text-gray-400'
             )} />
             {phoneFile ? (
               <div>
-                <span className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg px-3 py-1.5 text-sm font-medium">
+                <span className="inline-flex items-center gap-2 bg-primary-50 text-primary-700 border border-primary-200 rounded-lg px-3 py-1.5 text-sm font-medium">
                   <Phone size={13} />
                   {phoneFile.name}
                 </span>
                 <p className="text-xs text-gray-400 mt-2">{(phoneFile.size / 1024).toFixed(1)} KB</p>
                 {csvResult?.valid && (
-                  <p className="text-xs text-indigo-600 font-medium mt-1.5">
+                  <p className="text-xs text-primary-600 font-medium mt-1.5">
                     {t('nc_wiz.n_lines', { n: csvResult.tasks.length })}
                   </p>
                 )}
@@ -1599,7 +1598,7 @@ export function NewSurveyPage() {
               {t('common.prev')}
             </button>
             <button onClick={handleCreate} disabled={!csvResult?.valid || creating}
-              className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
+              className="flex-1 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2">
               {creating && <Loader2 size={14} className="animate-spin" />}
               {creating ? t('nc_wiz.creating_campaign') : t('nc_wiz.create_campaign')}
             </button>

@@ -2,7 +2,7 @@
 Agora Campaign helpers:
   POST /api/agora-campaigns/voice-prompt/extract-text  — extract plain text from a PDF/DOCX file
   POST /api/agora-campaigns/voice-prompt/generate      — stream AI-generated Voice Agent prompt JSON
-  POST /api/agora-campaigns/quota-suggest              — AI quota cell suggestion from questionnaire
+  POST /api/agora-campaigns/quota-suggest              — AI quota cell suggestion from a call script
 """
 from __future__ import annotations
 
@@ -35,7 +35,7 @@ def _anthropic_client() -> anthropic.AsyncAnthropic:
 
 @router.post('/voice-prompt/extract-text')
 async def extract_text(file: UploadFile = File(...)):
-    """Extract plain text from an uploaded PDF or DOCX questionnaire file."""
+    """Extract plain text from an uploaded PDF or DOCX call-script file."""
     data = await file.read()
     filename = (file.filename or '').lower()
 
@@ -136,7 +136,7 @@ async def generate_voice_prompt(
 # ── AI Quota Suggestion ────────────────────────────────────────────────────────
 
 _QUOTA_SUGGEST_SYSTEM = """\
-You are an expert in telephone survey quota sampling. Given a questionnaire, extract the quota/sampling constraints.
+You are an expert in outbound call-campaign quota sampling. Given a call script, extract the quota/sampling constraints.
 
 Output ONLY valid JSON in this exact format:
 {
@@ -148,10 +148,10 @@ Output ONLY valid JSON in this exact format:
 }
 
 Rules:
-- If the questionnaire has demographic quotas (age, gender, region, etc.), set has_quota=true and list each quota cell.
+- If the call script has demographic quotas (age, gender, region, etc.), set has_quota=true and list each quota cell.
 - Each cell's "label" should be a human-readable description (e.g. "Male, 20-29, Seoul").
 - Each cell's "filters" should be key-value pairs matching the dimensions (e.g. {"Gender": "Male", "Age": "20-29", "Region": "Seoul"}).
-- Set "target" to the number from the questionnaire if specified, otherwise use 30 as default.
+- Set "target" to the number from the call script if specified, otherwise use 30 as default.
 - If no quota constraints exist, set has_quota=false and explain in "message".
 - Output ONLY the JSON object, no markdown or extra text.
 """
@@ -163,7 +163,7 @@ async def quota_suggest(
     text: str | None = Form(None),
     language: str = Form('ko'),
 ):
-    """Analyze questionnaire file or text and suggest quota cells using AI."""
+    """Analyze a call-script file or text and suggest quota cells using AI."""
     if not settings.anthropic_api_key:
         raise HTTPException(503, detail='ANTHROPIC_API_KEY not configured')
 
@@ -193,7 +193,7 @@ async def quota_suggest(
                                     'data': b64,
                                 },
                             },
-                            {'type': 'text', 'text': 'Analyze this questionnaire and extract quota/sampling constraints.'},
+                            {'type': 'text', 'text': 'Analyze this call script and extract quota/sampling constraints.'},
                         ],
                     }],
                 )
@@ -230,7 +230,7 @@ async def quota_suggest(
         questionnaire_text = questionnaire_text + '\n' + text if questionnaire_text else text
 
     if not questionnaire_text.strip():
-        raise HTTPException(400, detail='No questionnaire content provided')
+        raise HTTPException(400, detail='No call-script content provided')
 
     client = _anthropic_client()
     try:
@@ -240,7 +240,7 @@ async def quota_suggest(
             system=_QUOTA_SUGGEST_SYSTEM,
             messages=[{
                 'role': 'user',
-                'content': f'Language: {language}\n\nQuestionnaire:\n{questionnaire_text[:6000]}',
+                'content': f'Language: {language}\n\nCall script:\n{questionnaire_text[:6000]}',
             }],
         )
         raw = resp.content[0].text.strip()

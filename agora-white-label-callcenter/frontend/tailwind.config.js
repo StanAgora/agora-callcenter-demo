@@ -4,15 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Primary accent — Indigo
+        // Primary accent, driven by frontend/src/brand.config.ts.
         primary: {
-          50:  '#EEF2FF',
-          100: '#E0E7FF',
-          200: '#C7D2FE',
-          400: '#818CF8',
-          500: '#6366F1',
-          600: '#4F46E5',
-          700: '#4338CA',
+          50:  'rgb(var(--brand-primary-50))',
+          100: 'rgb(var(--brand-primary-100))',
+          200: 'rgb(var(--brand-primary-200))',
+          300: 'rgb(var(--brand-primary-300))',
+          400: 'rgb(var(--brand-primary-400))',
+          500: 'rgb(var(--brand-primary-500))',
+          600: 'rgb(var(--brand-primary) / <alpha-value>)',
+          700: 'rgb(var(--brand-primary) / <alpha-value>)',
         },
         // Semantic surfaces
         surface: {

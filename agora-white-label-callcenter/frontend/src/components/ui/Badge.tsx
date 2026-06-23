@@ -29,7 +29,7 @@ export function TypeBadge({ type }: { type: 'CATI' | 'URL' }) {
     <span className={cn(
       'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
       type === 'CATI'
-        ? 'bg-indigo-50 text-indigo-600 border border-indigo-100'
+        ? 'bg-primary-50 text-primary-600 border border-primary-100'
         : 'bg-blue-50 text-blue-600 border border-blue-100'
     )}>
       {type}

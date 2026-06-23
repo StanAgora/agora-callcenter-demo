@@ -324,13 +324,12 @@ function LlmPromptBlock({
   const { t } = useTranslation()
   const isSystem = kind === 'system'
   const isGreeting = kind === 'greeting'
-  const isFailure = kind === 'failure'
   return (
     <div
       className={cn(
         'overflow-hidden rounded-xl border shadow-sm transition-shadow focus-within:shadow-md',
         isSystem
-          ? 'border-indigo-200 bg-white focus-within:border-indigo-300 focus-within:ring-2 focus-within:ring-indigo-500/15'
+          ? 'border-primary-200 bg-white focus-within:border-primary-300 focus-within:ring-2 focus-within:ring-primary-500/15'
           : isGreeting
             ? 'border-emerald-200 bg-white focus-within:border-emerald-300 focus-within:ring-2 focus-within:ring-emerald-500/15'
             : 'border-red-200 bg-white focus-within:border-red-300 focus-within:ring-2 focus-within:ring-red-500/15',
@@ -340,14 +339,14 @@ function LlmPromptBlock({
         className={cn(
           'flex items-center gap-2 border-b px-3 py-2',
           isSystem
-            ? 'border-indigo-100 bg-indigo-50'
+            ? 'border-primary-100 bg-primary-50'
             : isGreeting
               ? 'border-emerald-100 bg-emerald-50'
               : 'border-red-100 bg-red-50',
         )}
       >
         {isSystem ? (
-          <FileText className="h-4 w-4 flex-shrink-0 text-indigo-600" />
+          <FileText className="h-4 w-4 flex-shrink-0 text-primary-600" />
         ) : isGreeting ? (
           <MessageCircle className="h-4 w-4 flex-shrink-0 text-emerald-600" />
         ) : (
@@ -397,7 +396,7 @@ function TextInput({ value, onChange, placeholder, mono }: {
       value={value}
       onChange={e => onChange(e.target.value)}
       placeholder={placeholder}
-      className={cn('w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white', mono && 'font-mono')}
+      className={cn('w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white', mono && 'font-mono')}
     />
   )
 }
@@ -408,7 +407,7 @@ function NumberInput({ value, onChange }: { value: number; onChange: (v: number)
       type="number"
       value={value}
       onChange={e => onChange(Number(e.target.value))}
-      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
     />
   )
 }
@@ -420,7 +419,7 @@ function Toggle({ label, value, onChange }: { label: string; value: boolean; onC
       <button
         type="button"
         onClick={() => onChange(!value)}
-        className={cn('relative inline-flex h-5 w-9 items-center rounded-full transition-colors', value ? 'bg-indigo-600' : 'bg-gray-200')}
+        className={cn('relative inline-flex h-5 w-9 items-center rounded-full transition-colors', value ? 'bg-primary-600' : 'bg-gray-200')}
       >
         <span className={cn('inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform', value ? 'translate-x-4' : 'translate-x-1')} />
       </button>
@@ -479,7 +478,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
           fromPlaceholderRef.current = ''
           setEditingUncommitted(false)
         }}
-        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
         placeholder={t('common.secret_new_ph')}
       />
     )
@@ -499,7 +498,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
           fromPlaceholderRef.current = ''
           setEditingUncommitted(false)
         }}
-        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
       />
     )
   }
@@ -519,7 +518,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
             setDraft('')
             setReplaceMode(true)
           }}
-          className="shrink-0 text-xs text-indigo-600 hover:underline"
+          className="shrink-0 text-xs text-primary-600 hover:underline"
         >
           {t('common.replace')}
         </button>
@@ -533,7 +532,7 @@ function SecretInput({ value, onChange }: { value: string; onChange: (v: string)
       autoComplete="off"
       value={value || SENSITIVE_PLACEHOLDER}
       onChange={e => handleValueChange(e.target.value)}
-      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white"
+      className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
       placeholder={t('common.secret_keep_ph')}
     />
   )
@@ -552,7 +551,7 @@ export function PropsEditor({ form, onChange }: {
     <div className="space-y-3">
       {/* ── LLM ── */}
       <div>
-        <SectionHeader color="bg-indigo-50 text-indigo-700 hover:bg-indigo-100" title="LLM" open={open.llm} toggle={() => toggle('llm')} />
+        <SectionHeader color="bg-primary-50 text-primary-700 hover:bg-primary-100" title="LLM" open={open.llm} toggle={() => toggle('llm')} />
         {open.llm && (
           <div className="mt-2 space-y-2.5 pl-1">
             <LlmPromptBlock
@@ -884,47 +883,6 @@ export function AgentsPage() {
     })
   }
 
-  function TextCell({ label, content, kind }: { label: string; content: string | null; kind: 'system' | 'greeting' }) {
-    if (!content) {
-      return <span className="text-gray-300 text-xs">—</span>
-    }
-    const isSystem = kind === 'system'
-    return (
-      <button
-        type="button"
-        onClick={() => setTextModal({ title: label, content })}
-        className="group w-full max-w-[min(300px,100%)] text-left"
-        title={t('common.view_full')}
-      >
-        <div
-          className={cn(
-            'flex items-start gap-1.5 rounded-md border py-0.5 pl-1 pr-1.5 transition-colors',
-            isSystem
-              ? 'border-indigo-200 bg-indigo-50 hover:bg-indigo-100'
-              : 'border-emerald-200 bg-emerald-50 hover:bg-emerald-100',
-          )}
-        >
-          <span
-            className={cn(
-              'mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center self-start rounded',
-              isSystem ? 'bg-indigo-100 text-indigo-600' : 'bg-emerald-100 text-emerald-600',
-            )}
-          >
-            {isSystem ? <FileText className="h-2.5 w-2.5" /> : <MessageCircle className="h-2.5 w-2.5" />}
-          </span>
-          <p
-            className={cn(
-              'line-clamp-2 min-h-0 min-w-0 max-w-full flex-1 text-[11px] leading-snug text-gray-600',
-              isSystem && 'font-mono',
-            )}
-          >
-            {content}
-          </p>
-        </div>
-      </button>
-    )
-  }
-
   return (
     <div className="p-8 bg-gray-50 min-h-full">
       <div className="flex items-center justify-between mb-6">
@@ -934,7 +892,7 @@ export function AgentsPage() {
         </div>
         <button
           onClick={() => { setShowCreate(true); setCreateError('') }}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
         >
           <PlusCircle size={16} />
           Create Agent
@@ -964,14 +922,14 @@ export function AgentsPage() {
                 className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col overflow-hidden"
               >
                 {/* Top accent */}
-                <div className="h-0.5 bg-indigo-500" />
+                <div className="h-0.5 bg-primary-500" />
 
                 {/* Header */}
                 <div className="px-5 pt-4 pb-3">
                   <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex items-center gap-2 min-w-0">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
-                        <Bot size={16} className="text-indigo-600" />
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center">
+                        <Bot size={16} className="text-primary-600" />
                       </div>
                       <h3 className="font-semibold text-gray-900 text-sm leading-snug truncate">{a.agent_name}</h3>
                     </div>
@@ -1010,8 +968,8 @@ export function AgentsPage() {
                       onClick={() => setTextModal({ title: 'System Prompt', content: a.system_content! })}
                       className="w-full text-left group"
                     >
-                      <div className="flex items-start gap-1.5 rounded-lg border border-indigo-100 bg-indigo-50 px-2.5 py-2 hover:bg-indigo-100 transition-colors">
-                        <FileText size={12} className="text-indigo-500 mt-0.5 flex-shrink-0" />
+                      <div className="flex items-start gap-1.5 rounded-lg border border-primary-100 bg-primary-50 px-2.5 py-2 hover:bg-primary-100 transition-colors">
+                        <FileText size={12} className="text-primary-500 mt-0.5 flex-shrink-0" />
                         <p className="text-[11px] font-mono text-gray-600 line-clamp-2 leading-snug">{a.system_content}</p>
                       </div>
                     </button>
@@ -1032,7 +990,7 @@ export function AgentsPage() {
                 <div className="border-t border-gray-100 grid grid-cols-2">
                   <button
                     onClick={() => openPropsModal(a)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
+                    className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-colors border-r border-gray-100"
                   >
                     <Pencil size={13} /> Edit
                   </button>
@@ -1080,7 +1038,7 @@ export function AgentsPage() {
               onClick={handleUpdate}
               disabled={updating}
               className={cn('flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                updating ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}
+                updating ? 'bg-primary-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700')}
             >
               {updating && <Loader2 size={14} className="animate-spin" />}
               {updating ? 'Updating...' : 'UPDATE'}
@@ -1105,7 +1063,7 @@ export function AgentsPage() {
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">Agent Name <span className="text-red-500">*</span></label>
               <input type="text" value={createForm.agent_name} onChange={e => setCreateForm(f => ({ ...f, agent_name: e.target.value }))}
-                placeholder="stantest2" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+                placeholder="stantest2" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white" />
             </div>
             <LlmPromptBlock
               kind="system"
@@ -1134,13 +1092,13 @@ export function AgentsPage() {
                 <span className="text-gray-400 font-normal ml-1">(ai_assistant_008)</span>
               </label>
               <input type="text" value={createForm.voice_id} onChange={e => setCreateForm(f => ({ ...f, voice_id: e.target.value }))}
-                placeholder="ai_assistant_008" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white" />
+                placeholder="ai_assistant_008" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white" />
             </div>
             {createError && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{createError}</p>}
             <div className="flex justify-end gap-2 pt-1">
               <button type="button" onClick={resetCreate} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 hover:bg-gray-50 rounded-lg transition-colors">Cancel</button>
               <button type="submit" disabled={submitting}
-                className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors', submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700')}>
+                className={cn('inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors', submitting ? 'bg-primary-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700')}>
                 {submitting && <Loader2 size={14} className="animate-spin" />}
                 {submitting ? 'Creating...' : 'Create Agent'}
               </button>

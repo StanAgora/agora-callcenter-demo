@@ -1,9 +1,9 @@
+import { brandConfig } from '../brand.config'
+
 const AUTH_KEY = 'cwc_auth'
-const VALID_USER = 'agora'
-const VALID_PASS = 'agora'
 
 export function login(username: string, password: string): boolean {
-  if (username === VALID_USER && password === VALID_PASS) {
+  if (username === brandConfig.demoCredentials.username && password === brandConfig.demoCredentials.password) {
     localStorage.setItem(AUTH_KEY, '1')
     return true
   }

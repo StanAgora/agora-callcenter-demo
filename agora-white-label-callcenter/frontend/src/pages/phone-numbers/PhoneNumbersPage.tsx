@@ -135,7 +135,7 @@ export function PhoneNumbersPage() {
         </div>
         <button
           onClick={() => { setShowModal(true); setFormError('') }}
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
         >
           <PlusCircle size={16} />
           Add Number
@@ -186,7 +186,7 @@ export function PhoneNumbersPage() {
                       <td className="px-4 py-3 font-medium text-gray-900">{n.name}</td>
                       <td className="px-4 py-3 font-mono text-gray-600">{n.phone_number}</td>
                       <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-600">
                           {n.type}
                         </span>
                       </td>
@@ -248,7 +248,7 @@ export function PhoneNumbersPage() {
                   value={form.name}
                   onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
                   placeholder="EmbrainDemo1"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
@@ -262,7 +262,7 @@ export function PhoneNumbersPage() {
                   value={form.phone_number}
                   onChange={e => setForm(f => ({ ...f, phone_number: e.target.value }))}
                   placeholder="+12013040791"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
@@ -272,7 +272,7 @@ export function PhoneNumbersPage() {
                 <select
                   value={form.type}
                   onChange={e => setForm(f => ({ ...f, type: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                 >
                   {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -288,7 +288,7 @@ export function PhoneNumbersPage() {
                   value={form.sip_gateway_host}
                   onChange={e => setForm(f => ({ ...f, sip_gateway_host: e.target.value }))}
                   placeholder="43.166.133.68"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                 />
               </div>
 
@@ -303,7 +303,7 @@ export function PhoneNumbersPage() {
                     value={form.sip_signaling_port}
                     onChange={e => setForm(f => ({ ...f, sip_signaling_port: Number(e.target.value) }))}
                     placeholder="5060"
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                   />
                 </div>
                 <div>
@@ -311,7 +311,7 @@ export function PhoneNumbersPage() {
                   <select
                     value={form.outbound_protocol}
                     onChange={e => setForm(f => ({ ...f, outbound_protocol: e.target.value }))}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white text-gray-900"
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white text-gray-900"
                   >
                     {PROTOCOL_OPTIONS.map(p => <option key={p} value={p}>{p.toUpperCase()}</option>)}
                   </select>
@@ -337,7 +337,7 @@ export function PhoneNumbersPage() {
                   disabled={submitting}
                   className={cn(
                     'inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors',
-                    submitting ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+                    submitting ? 'bg-primary-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'
                   )}
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}

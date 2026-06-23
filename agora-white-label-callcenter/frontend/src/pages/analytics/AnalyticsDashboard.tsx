@@ -323,7 +323,7 @@ export function AnalyticsDashboard() {
               label="Total Calls"
               value={ft.total_calls.toLocaleString()}
               sub={range > 0 ? `Last ${range} days` : 'All time'}
-              iconBg="bg-indigo-600"
+              iconBg="bg-primary-600"
             />
             <StatCard
               icon={PhoneIncoming}
@@ -422,12 +422,12 @@ export function AnalyticsDashboard() {
                           <span className="text-gray-400">Progress</span>
                           <div className="flex items-center gap-1.5">
                             <span className="font-mono text-gray-600">{done} / {total}</span>
-                            <span className="font-semibold text-indigo-600">{pct}%</span>
+                            <span className="font-semibold text-primary-600">{pct}%</span>
                           </div>
                         </div>
                         <div className="h-1.5 w-full rounded-full overflow-hidden bg-gray-100">
                           <div
-                            className="h-full rounded-full transition-all duration-300 bg-indigo-500"
+                            className="h-full rounded-full transition-all duration-300 bg-primary-500"
                             style={{ width: `${Math.max(pct, pct > 0 ? 2 : 0)}%` }}
                           />
                         </div>
@@ -436,7 +436,7 @@ export function AnalyticsDashboard() {
                       <div className="border-t border-gray-100 grid grid-cols-3 mt-auto">
                         <button
                           onClick={() => navigate(`/campaigns/${c.campaign_id}`)}
-                          className="flex items-center justify-center gap-1 py-2 text-xs font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition-colors border-r border-gray-100"
+                          className="flex items-center justify-center gap-1 py-2 text-xs font-medium text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-colors border-r border-gray-100"
                         >
                           <LayoutDashboard size={12} /> Detail
                         </button>
@@ -448,7 +448,7 @@ export function AnalyticsDashboard() {
                         </button>
                         <button
                           onClick={() => navigate(`/campaigns/${c.campaign_id}/agent-prompt`)}
-                          className="flex items-center justify-center gap-1 py-2 text-xs font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                          className="flex items-center justify-center gap-1 py-2 text-xs font-medium text-gray-500 hover:bg-primary-50 hover:text-primary-600 transition-colors"
                         >
                           <Bot size={12} /> Prompt
                         </button>

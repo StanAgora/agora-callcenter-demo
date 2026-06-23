@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Smart Campaign Manager** — a platform for managing Korean telephone survey campaigns. Supports two survey types:
-- **CATI**: operator-assisted calls via cati.panel.co.kr; upload `.xlsx` with quota + phone list sheets
-- **URL (OQD)**: operator-fills browser form; upload `.html` variable guide (EUC-KR encoded) for AI quota extraction
+**Call Center Console** — a white-label platform for managing outbound voice call-center campaigns. Supports two campaign input modes (the internal type codes `CATI`/`URL` are kept for compatibility):
+- **Spreadsheet upload**: upload an `.xlsx` with quota + phone-list sheets
+- **URL / web import**: upload an `.html` variable guide (encoding auto-detected) for AI quota extraction
+
+The UI is white-label: product name, logo, theme colors, and copy are driven by `frontend/src/brand.config.ts` with `VITE_BRAND_*` environment overrides.
 
 ## Development Commands
 
@@ -50,16 +52,16 @@ backend/app/
 ├── models/                  # SQLAlchemy ORM: Survey, QuotaCell, PhoneRecord, CallLog
 ├── schemas/                 # Pydantic I/O: survey.py, quota.py, callback.py
 ├── api/
-│   ├── surveys.py           # GET/POST /api/surveys + /upload (parses CATI xlsx or OQD html)
+│   ├── surveys.py           # GET/POST /api/surveys + /upload (parses spreadsheet or web import)
 │   ├── quotas.py            # GET/PUT /api/surveys/:id/quotas + /ai-suggest (Claude API)
 │   ├── campaigns.py         # POST /api/surveys/:id/campaign/start|pause
 │   ├── callbacks.py         # POST /api/callbacks/call-result (Voice Agent callback)
 │   └── websocket.py         # WS /ws/campaigns/:id
 └── services/
     ├── parsers/
-    │   ├── cati_parser.py   # openpyxl: reads 쿼터샘플데이타 + 리스트샘플데이타 sheets
-    │   └── oqd_parser.py    # chardet + BeautifulSoup: EUC-KR HTML, extracts variables + routing
-    ├── quota_ai.py          # Claude claude-sonnet-4-6: returns JSON quota config from questionnaire text
+    │   ├── cati_parser.py   # openpyxl: reads the quota + phone-list sheets
+    │   └── oqd_parser.py    # chardet + BeautifulSoup: encoding-auto-detected HTML, extracts variables + routing
+    ├── quota_ai.py          # Claude claude-sonnet-4-6: returns JSON quota config from call-script text
     ├── voice_agent.py       # httpx adapter: initiate_call / get_call_status / cancel_call
     ├── campaign_runner.py   # asyncio task per survey: poll VA → update DB → broadcast WS
     ├── ws_hub.py            # ConnectionHub: per-survey WebSocket subscriber sets
@@ -68,8 +70,8 @@ backend/app/
 
 ## Key Data Flows
 
-**Upload CATI file** → `cati_parser.py` → QuotaCells + PhoneRecords in DB
-**Upload OQD file** → `oqd_parser.py` → `survey.questionnaire_raw` (text for AI)
+**Upload spreadsheet** → `cati_parser.py` → QuotaCells + PhoneRecords in DB
+**Upload web import** → `oqd_parser.py` → `survey.questionnaire_raw` (call-script text for AI)
 **AI suggest** → `quota_ai.py` calls Claude → QuotaCells created from JSON response
 **Start campaign** → `campaign_runner.start_campaign()` spawns asyncio task → polls Voice Agent every N seconds → updates DB + broadcasts via `ws_hub`
 **Voice Agent callback** → `POST /api/callbacks/call-result` → `_handle_call_result()` → increments QuotaCell.completed, broadcasts WS
@@ -87,7 +89,7 @@ backend/app/
 ```
 
 ## Call Result Codes
-0=조사성공 1=결번 2=기업체/FAX 3=강력거절 4=거절 5=비수신 6=통화중 7=대상아님 8=쿼터오버 9=중도포기 10=기타
+0=Completed 1=Invalid Number 2=Business/Fax 3=Declined 4=Soft Decline 5=No Answer 6=Busy 7=Not Eligible 8=Quota Full 9=Abandoned 10=Other
 
 ## Environment Variables (backend/.env)
 - `DATABASE_URL` — async SQLAlchemy URL (default: `sqlite+aiosqlite:///./dev.db`)

@@ -2,9 +2,9 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { cn } from '../lib/utils'
 import { PlusCircle, Radio, PhoneCall, Bot, History, PhoneIncoming, BarChart2, LogOut, Settings, UserCircle2 } from 'lucide-react'
-import agoraLogo from '../assets/agora-logo-2.webp'
 import { LANGUAGES, setLang, type Lang } from '../i18n'
 import { logout } from '../lib/auth'
+import { brandConfig } from '../brand.config'
 
 export function Layout() {
   const { t, i18n } = useTranslation()
@@ -31,11 +31,22 @@ export function Layout() {
       <aside className="w-56 bg-white border-r border-gray-100 flex flex-col flex-shrink-0">
         {/* Logo */}
         <div className="px-4 h-14 flex items-center gap-2.5 border-b border-gray-100">
-          <img src={agoraLogo} alt="Agora" className="h-6 w-auto object-contain" />
-          <span className="text-[11px] font-medium text-gray-400 tracking-wide">
-            {t('nav.subtitle')}
+          {brandConfig.logo ? (
+            <img src={brandConfig.logo} alt={brandConfig.productName} className="h-7 max-w-[128px] object-contain" />
+          ) : (
+            <div className="h-8 w-8 rounded-lg bg-primary-600 text-white flex items-center justify-center text-sm font-semibold">
+              {brandConfig.productName.slice(0, 1).toUpperCase()}
+            </div>
+          )}
+          <span className="text-[11px] font-semibold text-gray-500 tracking-wide truncate">
+            {brandConfig.productName}
           </span>
         </div>
+        {brandConfig.demoBanner.enabled && (
+          <div className="mx-3 mt-3 rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-[11px] font-medium leading-4 text-amber-700">
+            {brandConfig.demoBanner.text}
+          </div>
+        )}
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
@@ -47,7 +58,7 @@ export function Layout() {
                 cn(
                   'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
                   isActive
-                    ? 'bg-indigo-50 text-indigo-700 font-medium'
+                    ? 'bg-primary-50 text-primary-700 font-medium'
                     : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                 )
               }
@@ -57,7 +68,7 @@ export function Layout() {
                   <Icon
                     size={16}
                     strokeWidth={isActive ? 2.25 : 1.75}
-                    className={isActive ? 'text-indigo-600' : 'text-gray-400'}
+                    className={isActive ? 'text-primary-600' : 'text-gray-400'}
                   />
                   {label}
                 </>
@@ -71,7 +82,7 @@ export function Layout() {
           <select
             value={i18n.language}
             onChange={e => setLang(e.target.value as Lang)}
-            className="w-full px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent cursor-pointer"
+            className="w-full px-3 py-1.5 rounded-lg text-xs text-gray-600 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent cursor-pointer"
           >
             {LANGUAGES.map(({ code, flag, label }) => (
               <option key={code} value={code}>
@@ -84,12 +95,12 @@ export function Layout() {
         {/* User profile */}
         <div className="px-3 py-3 border-t border-gray-100">
           <div className="flex items-center gap-2.5 px-2 py-1.5 rounded-xl bg-gray-50">
-            <div className="w-7 h-7 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0">
-              <UserCircle2 size={15} className="text-indigo-500" />
+            <div className="w-7 h-7 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+              <UserCircle2 size={15} className="text-primary-500" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-700 truncate">agora</p>
-              <p className="text-[10px] text-gray-400 truncate">Admin</p>
+              <p className="text-xs font-medium text-gray-700 truncate">{brandConfig.sidebarUserLabel}</p>
+              <p className="text-[10px] text-gray-400 truncate">{brandConfig.sidebarUserRole}</p>
             </div>
             <NavLink
               to="/settings"
@@ -97,7 +108,7 @@ export function Layout() {
               className={({ isActive }) =>
                 cn(
                   'p-1 rounded-lg transition-colors',
-                  isActive ? 'text-indigo-600 bg-indigo-50' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
+                  isActive ? 'text-primary-600 bg-primary-50' : 'text-gray-400 hover:text-gray-600 hover:bg-gray-100'
                 )
               }
             >
